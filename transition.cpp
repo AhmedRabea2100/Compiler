@@ -5,6 +5,10 @@ Transition::Transition(State *from, State *to, char input)
     : from(from), to(to), input(input)
 {}
 
+Transition::Transition(State *from, State *to)
+    : from(from), to(to), input(EPSILON)
+{}
+
 const State* Transition::get_from()
 {
     return from;
