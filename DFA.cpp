@@ -6,73 +6,111 @@
 #include "state.h"
 #include <stack>
 
-void DFA::e_closure_recursive(State *s,set<State*>& visited) {
+// Function to perform epsilon closure recursively starting from a given state
+void DFA::e_closure_recursive(State *s, set<State*>& visited) {
+    // Mark the current state as visited
     visited.insert(s);
+
+    // Add the current state to the epsilon closure set
     closure.insert(s);
+
+    // Get all transitions from the current state
     const vector<Transition>& all_transition = s->get_transitions();
 
-    for (Transition transition : all_transition)
-    {
-        if (transition.get_input() == EPSILON)
-        {
+    // Iterate through each transition
+    for (Transition transition : all_transition) {
+        // Check if the transition is an epsilon transition
+        if (transition.get_input() == EPSILON) {
+            // Retrieve the destination state of the epsilon transition
             auto* to = const_cast<State*>(transition.get_to());
-            closure.insert(to);
-            e_closure_recursive(to, visited);
+
+            if (visited.find(to) == visited.end()) {
+                // Add the destination state to the epsilon closure set
+                closure.insert(to);
+
+                // Recursively perform epsilon closure on the destination state
+                e_closure_recursive(to, visited);
+            }
         }
     }
-
 }
 
-set<State*> DFA::e_closure(State* s)
-{
+// Function to calculate the epsilon closure of a given state
+set<State*> DFA::e_closure(State* s) {
+    // Clear the epsilon closure set
     closure.clear();
+
+    // Set to keep track of visited states during epsilon closure calculation
     set<State*> visited;
 
-    e_closure_recursive(s,visited);
+    // Perform epsilon closure starting from the given state
+    e_closure_recursive(s, visited);
+
+    // Return the epsilon closure set
     return closure;
 }
 
-set<State*> DFA::e_closure(set<State*> T)
-{
+
+// Function to calculate the epsilon closure of a set of states
+set<State*> DFA::e_closure(set<State*> T) {
+    // Set to store the epsilon closure of the input set of states
     set<State*> T_closure;
-    // push all states in T onto stack
+
+    // Stack to perform depth-first search during epsilon closure calculation
     stack<State*> stack;
-    for (State* s : T)
-    {
+
+    // Push all states in T onto the stack
+    for (State* s : T) {
         stack.push(s);
     }
-    while (!stack.empty()){
+
+    // Perform depth-first search to compute epsilon closure
+    while (!stack.empty()) {
+        // Pop the top state from the stack
         State* state = stack.top();
         stack.pop();
-        set<State*> set = e_closure(state);
-        // check if set is already in T
-        for (State* s : set)
-        {
-            if (T_closure.find(s) == T_closure.end())
-            {
+
+        // Calculate epsilon closure for the current state
+        set<State*> epsilon_closure_set = e_closure(state);
+
+        // Check if each state in the epsilon closure set is already in T_closure
+        for (State* s : epsilon_closure_set) {
+            // If the state is not in T_closure, add it and push it onto the stack
+            if (T_closure.find(s) == T_closure.end()) {
                 T_closure.insert(s);
                 stack.push(s);
             }
         }
     }
+
+    // Return the final epsilon closure set for the input set of states
     return T_closure;
 }
 
-set<State*> DFA::move(set<State*> T, char input)
-{
+
+// Function to calculate the move of a set of states given a specific input character
+set<State*> DFA::move(set<State*> T, char input) {
+    // Set to store the resulting set of states after applying the move operation
     set<State*> T_move;
-    for (State* s : T)
-    {
-        const vector<Transition>& all_transition = s->get_transitions();
-        for (Transition transition : all_transition)
-        {
-            if (transition.get_input() == input)
-            {
+
+    // Iterate through each state in the input set T
+    for (State* s : T) {
+        // Get all transitions from the current state
+        const vector<Transition>& all_transitions = s->get_transitions();
+
+        // Iterate through each transition of the current state
+        for (Transition transition : all_transitions) {
+            // Check if the transition has the specified input character
+            if (transition.get_input() == input) {
+                // Retrieve the destination state of the transition
                 auto* to = const_cast<State*>(transition.get_to());
+
+                // Add the destination state to the set T_move
                 T_move.insert(to);
             }
         }
     }
-    return T_move;
 
+    // Return the resulting set of states after applying the move operation
+    return T_move;
 }
