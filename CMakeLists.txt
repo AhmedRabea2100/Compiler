@@ -3,4 +3,4 @@ project(Compiler)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(Compiler main.cpp state.cpp transition.cpp)
+add_executable(Compiler main.cpp state.cpp transition.cpp nfa.cpp)
