@@ -7,7 +7,6 @@
 enum Type {
     CHAR,
     OPERATOR,
-    DEFAULT_TYPE
 };
 
 struct RegexChar {
