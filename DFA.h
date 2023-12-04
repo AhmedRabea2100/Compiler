@@ -1,6 +1,4 @@
-//
-// Created by User on 12/3/2023.
-//
+
 
 #ifndef COMPILER_DFA_H
 #define COMPILER_DFA_H
@@ -9,6 +7,7 @@
 
 #include "state.h"
 #include "transition.h"
+#include "Dstates.h"
 #include <vector>
 #include <map>
 #include <set>
@@ -21,9 +20,12 @@ public:
     set<State*> e_closure(State* s);
     set<State*> e_closure(set<State*> T);
     set<State*> move(set<State*> T, char input);
+    set<Dstates*> NFA_to_DFA(set<State*> start_states);
 protected:
 
 private:
     set<State*> closure;
     void e_closure_recursive(State *s, set<State *> &visited);
+
+
 };

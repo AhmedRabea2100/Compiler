@@ -1,10 +1,11 @@
-//
-// Created by User on 12/3/2023.
-//
+
 
 #include "DFA.h"
 #include "state.h"
 #include <stack>
+#include <queue>
+#include <algorithm>
+
 
 // Function to perform epsilon closure recursively starting from a given state
 void DFA::e_closure_recursive(State *s, set<State*>& visited) {
@@ -113,4 +114,48 @@ set<State*> DFA::move(set<State*> T, char input) {
 
     // Return the resulting set of states after applying the move operation
     return T_move;
+}
+
+
+set<Dstates*> DFA::NFA_to_DFA(set<State*> start_states) {
+    queue<Dstates*> unmarked;
+    set<Dstates*> dfa_states;
+
+    // Create the initial Dstate
+    Dstates* initial = new Dstates(e_closure(start_states));
+    dfa_states.insert(initial);
+    unmarked.push(initial);
+
+    set<char> inputs = {'a', 'b'};
+
+    while (!unmarked.empty()) {
+        Dstates* T = unmarked.front();
+        unmarked.pop();
+
+        for (const auto& input : inputs) {
+            set<State*> U = e_closure(move(T->get_U(), input));
+
+            if (U.empty()) {
+                T->set_transation(input, new Dstates());
+                continue;
+            }
+
+            // Find U in dfa_states
+            auto it = find_if(dfa_states.begin(), dfa_states.end(),
+                              [&U](Dstates* d) { return d->get_U() == U; });
+
+            if (it == dfa_states.end()) {
+                // U not found, create a new Dstates
+                Dstates* dest = new Dstates(U);
+                dfa_states.insert(dest);
+                unmarked.push(dest);
+                T->set_transation(input, dest);
+            } else {
+                // U found, set the transition to the existing Dstates
+                T->set_transation(input, *it);
+            }
+        }
+    }
+
+    return dfa_states;
 }
