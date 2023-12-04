@@ -2,14 +2,14 @@
 
 NFA::NFA() {}
 
-NFA::NFA(const State &start, const State &end) : start(start), end(end) {}
+NFA::NFA(State &start, State &end) : start(start), end(end) {}
 
 NFA::NFA(char input)
 {
     start.add_transition(&end, input);
 }
 
-NFA NFA::uni(NFA a, NFA b)
+NFA NFA::uni(NFA &a, NFA &b)
 {
 
     NFA result;
@@ -21,14 +21,14 @@ NFA NFA::uni(NFA a, NFA b)
     return result;
 }
 
-NFA NFA::concat(NFA a, NFA b)
+NFA NFA::concat(NFA &a, NFA &b)
 {
     NFA result = NFA(a.start, b.end);
     a.end.add_transition(&b.start);
     return result;
 }
 
-NFA NFA::star(NFA a)
+NFA NFA::star(NFA &a)
 {
     NFA result;
     result.start.add_transition(&a.start);
@@ -38,7 +38,7 @@ NFA NFA::star(NFA a)
     return result;
 }
 
-NFA NFA::plus(NFA a)
+NFA NFA::plus(NFA &a)
 {
     NFA result;
     result.start.add_transition(&a.start);
