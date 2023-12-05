@@ -126,7 +126,7 @@ set<Dstates*> DFA::NFA_to_DFA(set<State*> start_states) {
     dfa_states.insert(initial);
     unmarked.push(initial);
 
-    set<char> inputs = {'a', 'b'};
+    set<char> inputs = {'0', '1'};
 
     while (!unmarked.empty()) {
         Dstates* T = unmarked.front();

@@ -7,4 +7,4 @@ add_executable(Compiler main.cpp state.cpp transition.cpp
         DFA.h
         DFA.cpp
         Dstates.h
-        Dstates.cpp)
+        Dstates.cpp Minimize.cpp Minimize.h)

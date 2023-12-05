@@ -2,7 +2,7 @@
 #ifndef COMPILER_DSTATES_H
 #define COMPILER_DSTATES_H
 
-#endif //COMPILER_DSTATES_H
+
 
 #include"State.h"
 
@@ -18,6 +18,7 @@ class Dstates
 public:
      Dstates(set<State*> U);
      Dstates();
+     Dstates(int id);
      int get_id() ;
      bool get_is_final() ;
      State::Type get_type() ;
@@ -25,6 +26,9 @@ public:
     set<State*> get_U();
 
 
+    void set_final(bool is_final);
+    void set_priority(int p) ;
+    void set_type(State::Type type) ;
     void set_transation(char input, Dstates* to);
     Dstates* get_transation(char input);
 
@@ -43,3 +47,5 @@ private:
     static int id_generator;
 
 };
+
+#endif //COMPILER_DSTATES_H

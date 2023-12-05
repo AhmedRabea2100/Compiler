@@ -43,6 +43,11 @@ Dstates::Dstates()
 
 }
 
+Dstates::Dstates(int id)
+        : id(id){
+
+}
+
  int Dstates::get_id()
 {
     return id;
@@ -66,6 +71,20 @@ int Dstates::get_priority()
 set<State*> Dstates::get_U()
 {
         return U;
+}
+
+void Dstates::set_final(bool is_final) {
+    this->is_final = is_final;
+}
+
+
+
+void Dstates::set_priority(int p) {
+    this->priority = p ;
+}
+
+void Dstates::set_type(State::Type type){
+    this->type = type;
 }
 
 void Dstates::set_transation(char input, Dstates *to) {
