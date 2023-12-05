@@ -1,9 +1,5 @@
-
-
 #ifndef COMPILER_DFA_H
 #define COMPILER_DFA_H
-
-#endif //COMPILER_DFA_H
 
 #include "state.h"
 #include "transition.h"
@@ -29,3 +25,8 @@ private:
 
 
 };
+
+
+
+#endif //COMPILER_DFA_H
+
