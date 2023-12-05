@@ -3,10 +3,10 @@
 int State::max_id = -1;
 
 State::State()
-    : id(++max_id), is_final(false), type(State::Type::NONE), priority(0)
+    : id(++max_id), is_final(false), type(""), priority(0)
 {}
 
-State::State(bool is_final, Type type, int priority)
+State::State(bool is_final, string type, int priority)
     : id(++max_id), is_final(is_final), type(type), priority(priority)
 {}
 
@@ -35,12 +35,12 @@ void State::set_priority(int priority)
     this->priority = priority;
 }
 
-State::Type State::get_type() const
+string State::get_type() const
 {
     return type;
 }
 
-void State::set_type(Type type)
+void State::set_type(string type)
 {
     this->type = type;
 }

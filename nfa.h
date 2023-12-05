@@ -1,8 +1,12 @@
+#pragma once
 #include "state.h"
 
 class NFA
 {
 public:
+    State start;
+    State end;
+
     NFA();
     NFA(State &start, State &end);
     NFA(char input);
@@ -11,11 +15,4 @@ public:
     static NFA concat(NFA &a, NFA &b);
     static NFA star(NFA &a);
     static NFA plus(NFA &a);
-
-    State get_start();
-    State get_end();
-
-private:
-    State start;
-    State end;
 };

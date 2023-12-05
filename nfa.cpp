@@ -11,7 +11,6 @@ NFA::NFA(char input)
 
 NFA NFA::uni(NFA &a, NFA &b)
 {
-
     NFA result;
     result.start.add_transition(&a.start);
     result.start.add_transition(&b.start);
@@ -45,14 +44,4 @@ NFA NFA::plus(NFA &a)
     a.end.add_transition(&result.end);
     a.end.add_transition(&a.start);
     return result;
-}
-
-State NFA::get_start()
-{
-    return start;
-}
-
-State NFA::get_end()
-{
-    return end;
 }

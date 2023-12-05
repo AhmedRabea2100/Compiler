@@ -1,9 +1,8 @@
 #include <iostream>
-#include "state.h"
-#include "transition.h"
+#include <vector>
 #include "./GrammarParser/GrammarParser.h"
 #include "./GrammarParser/Token.h"
-#include <vector>
+#include "nfa-builder.h"
 
 int main() {
     GrammarParser grammarParser;
@@ -16,6 +15,9 @@ int main() {
         }
         std:: cout << std::endl;
     }
+
+    NFABuilder builder;
+    NFA nfa = builder.build(tokens);
 
     return 0;
 }
