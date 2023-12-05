@@ -18,7 +18,7 @@ public:
     Dstates();
     int get_id() ;
     bool get_is_final() ;
-    State::Type get_type() ;
+    string get_type() ;
     int get_priority() ;
     set<State*> get_U();
 
@@ -34,7 +34,7 @@ protected:
 private:
     const int id;
     bool is_final;
-    State::Type type;
+    string type;
     int priority;
     set<State*> U;
 

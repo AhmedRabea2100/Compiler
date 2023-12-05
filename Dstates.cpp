@@ -6,7 +6,7 @@
 int Dstates::id_generator = 0;
 
 Dstates::Dstates(set<State*> U)
-        : id(id_generator++), is_final(false), type(State::Type::NONE), priority(-1)
+        : id(id_generator++), is_final(false), type(""), priority(-1)
 {
     this->U = U;
     // Flag to track whether an accepting state has been encountered
@@ -30,7 +30,7 @@ Dstates::Dstates(set<State*> U)
 
     // If the set of states is empty, set the type to NONE
     if (U.empty()) {
-        this->type = State::Type::NONE;
+        this->type = "";
     }
 
     // Set is_final based on whether at least one accepting state was found
@@ -53,7 +53,7 @@ Dstates::Dstates()
     return is_final;
 }
 
-State::Type Dstates::get_type()
+string Dstates::get_type()
 {
         return type;
 }

@@ -4,6 +4,7 @@
 #include "state.h"
 #include <stack>
 #include <queue>
+#include "nfa-builder.h"
 #include <algorithm>
 
 
@@ -117,7 +118,7 @@ set<State*> DFA::move(set<State*> T, char input) {
 }
 
 
-set<Dstates*> DFA::NFA_to_DFA(set<State*> start_states) {
+set<Dstates*> DFA::NFA_to_DFA(set<State*> start_states,unordered_set<char> inputs) {
     queue<Dstates*> unmarked;
     set<Dstates*> dfa_states;
 
@@ -126,7 +127,6 @@ set<Dstates*> DFA::NFA_to_DFA(set<State*> start_states) {
     dfa_states.insert(initial);
     unmarked.push(initial);
 
-    set<char> inputs = {'a', 'b'};
 
     while (!unmarked.empty()) {
         Dstates* T = unmarked.front();

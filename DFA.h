@@ -7,6 +7,7 @@
 #include <vector>
 #include <map>
 #include <set>
+#include <unordered_set>
 
 using namespace std;
 
@@ -16,7 +17,7 @@ public:
     set<State*> e_closure(State* s);
     set<State*> e_closure(set<State*> T);
     set<State*> move(set<State*> T, char input);
-    set<Dstates*> NFA_to_DFA(set<State*> start_states);
+    set<Dstates*> NFA_to_DFA(set<State*> start_states,unordered_set<char> inputs);
 protected:
 
 private:
