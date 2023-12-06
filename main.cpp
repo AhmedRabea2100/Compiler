@@ -33,14 +33,22 @@ int main() {
     auto end_time = std::chrono::high_resolution_clock::now();
 
     // Calculate the duration
+    int c=0;
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time);
-
+    for(auto &state : dfa_states) {
+        if(!state->get_is_final()) {
+            cout << "DFA   " << state->get_id() << "  " << state->get_is_final() << endl;
+            c++;
+        }
+    }
+    cout << "DFA   " << c << endl;
     // Output the duration in microseconds
     std::cout << "Time taken: " << duration.count() << " microseconds" << std::endl;
+    cout << "DFA   " << dfa_states.size() << endl;
 
     Minimize minimize;
     set<Dstates *> minimized_dfa = minimize.minimize(dfa_states);
-    cout << "Minimized DFA" << minimized_dfa.size() << endl;
+    cout << "Minimized DFA  " << minimized_dfa.size() << endl;
 
     CodeParser codeParser(dfa_states);
     codeParser.parseFile("D:/Last year/Project/Compiler/test_code.txt");

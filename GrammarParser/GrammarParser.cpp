@@ -181,7 +181,7 @@ std::vector<RegexChar*> GrammarParser::infixToPostfix(std::string str) {
             i++;
             c = str[i];
         }
-        if(c == LAMBDA_SYM) {
+        if(c == LAMBDA_SYM&& str[i-1] == '\\') {
             c = ' ';
         }
 
