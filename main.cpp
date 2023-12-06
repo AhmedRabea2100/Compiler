@@ -7,6 +7,7 @@
 #include "DFA.h"
 #include <chrono>
 #include "CodeParser.h"
+#include "Minimize.h"
 
 int main() {
     GrammarParser grammarParser;
@@ -37,6 +38,9 @@ int main() {
     // Output the duration in microseconds
     std::cout << "Time taken: " << duration.count() << " microseconds" << std::endl;
 
+    Minimize minimize;
+    set<Dstates *> minimized_dfa = minimize.minimize(dfa_states);
+    cout << "Minimized DFA" << minimized_dfa.size() << endl;
 
     CodeParser codeParser(dfa_states);
     codeParser.parseFile("D:/Last year/Project/Compiler/test_code.txt");

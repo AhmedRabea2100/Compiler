@@ -83,7 +83,7 @@ void Dstates::set_priority(int p) {
     this->priority = p ;
 }
 
-void Dstates::set_type(State::Type type){
+void Dstates::set_type(string type){
     this->type = type;
 }
 
