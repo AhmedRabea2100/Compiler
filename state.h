@@ -1,36 +1,36 @@
 #pragma once
 #include "transition.h"
 #include <vector>
+#include <string>
 using namespace std;
 
 class State
 {
 public:
-    enum class Type
-    {
-        NONE,
-        id,
-        number,
-        keyword,
-        op,
-        symbol
-    };
+    State();
+    State(bool is_final, string type, int priority);
 
-    State(bool is_final, Type type, int priority);
     const int get_id() const;
-    const bool get_is_final() const;
-    const Type get_type() const;
-    const int get_priority() const;
+
+    bool get_is_final() const;
+    void set_is_final(bool is_final);
+
+    int get_priority() const;
+    void set_priority(int priority);
+
+    string get_type() const;
+    void set_type(string type);
+
     vector<Transition> get_transitions();
     void add_transition(Transition t);
-    void add_transition(State* to, char input);
-    void add_transition(State* to);
+    void add_transition(State *to, char input);
+    void add_transition(State *to);
 
 private:
     static int max_id;
     const int id;
-    const bool is_final;
-    const Type type;
-    const int priority;
+    bool is_final;
+    int priority;
+    string type;
     vector<Transition> transitions;
 };
