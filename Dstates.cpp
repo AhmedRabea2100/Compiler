@@ -17,7 +17,7 @@ Dstates::Dstates(set<State*> U)
         // Check if the state is an accepting state
         if (state->get_is_final()) {
             // If it's the first accepting state encountered, or it has higher priority
-            if (!flag || this->priority > state->get_priority()) {
+            if (this->priority < state->get_priority()) {
                 // Update the type and priority
                 this->type = state->get_type();
                 this->priority = state->get_priority();
@@ -39,7 +39,7 @@ Dstates::Dstates(set<State*> U)
 }
 
 Dstates::Dstates()
-        : id(-1){
+        : id(-1), is_final(false){
 
 }
 

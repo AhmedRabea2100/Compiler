@@ -14,4 +14,5 @@ add_executable(Compiler main.cpp
         transition.cpp
         nfa.cpp
         nfa-builder.cpp
+        CodeParser.cpp
 )
