@@ -80,6 +80,7 @@ NFA* NFABuilder::build(Token *token)
 
                 NFABuilder builder;
                 NFA* result = builder.build(&t);
+                result->end.set_is_final(false);
                 operands.push(result);
                 break;
             }
@@ -91,7 +92,6 @@ NFA* NFABuilder::build(Token *token)
     result->end.set_priority(token->getPriority());
     result->end.set_type(token->getType());
 
-    start.add_transition(&result->start);
     return result;
 }
 
@@ -99,7 +99,8 @@ NFA NFABuilder::build(vector<Token *> tokens)
 {
     for (auto &token : tokens)
     {
-        build(token);
+        NFA* result = build(token);
+        start.add_transition(&result->start);
     }
     return get_NFA();
 }
