@@ -6,87 +6,86 @@
 #include <queue>
 #include "nfa-builder.h"
 #include <algorithm>
+#include <iostream>
 
 
-// Function to perform epsilon closure recursively starting from a given state
-void DFA::e_closure_recursive(State *s, set<State*>& visited) {
-    // Mark the current state as visited
-    visited.insert(s);
+//// Function to perform epsilon closure recursively starting from a given state
+//void DFA::e_closure_recursive(State *s, set<State*>& visited,set<State*>& closure) {
+//    // Mark the current state as visited
+//    visited.insert(s);
+//
+//    // Add the current state to the epsilon closure set
+//    closure.insert(s);
+//
+//    // Get all transitions from the current state
+//    const vector<Transition>& all_transition = s->get_transitions();
+//
+//    // Iterate through each transition
+//    for (Transition transition : all_transition) {
+//        // Check if the transition is an epsilon transition
+//        if (transition.get_input() == EPSILON) {
+//            // Retrieve the destination state of the epsilon transition
+//            auto* to = const_cast<State*>(transition.get_to());
+//            if (visited.find(to) == visited.end()) {
+////                cout <<"from: "<<transition.get_from()->get_id() <<"   to: " << to->get_id()<< "  input:  +" << transition.get_input() << "+  is_final "<< to->get_is_final()<< endl;
+//                // Add the destination state to the epsilon closure set
+//                closure.insert(to);
+//
+//                // Recursively perform epsilon closure on the destination state
+//                e_closure_recursive(to, visited, closure);
+//            }
+//        }
+//    }
+//}
+//
+//
+//// Function to calculate the epsilon closure of a given state
+//set<State*> DFA::e_closure(State* s) {
+//    // Clear the epsilon closure set
+//
+//    set<State*> closure;
+//
+//    // Set to keep track of visited states during epsilon closure calculation
+//    set<State*> visited;
+//
+//    // Perform epsilon closure starting from the given state
+//    e_closure_recursive(s, visited, closure);
+//
+//    // Return the epsilon closure set
+//    return closure;
+//}
 
-    // Add the current state to the epsilon closure set
-    closure.insert(s);
 
-    // Get all transitions from the current state
-    const vector<Transition>& all_transition = s->get_transitions();
+set<State*> returned;
 
-    // Iterate through each transition
-    for (Transition transition : all_transition) {
-        // Check if the transition is an epsilon transition
-        if (transition.get_input() == EPSILON) {
-            // Retrieve the destination state of the epsilon transition
-            auto* to = const_cast<State*>(transition.get_to());
+void DFA::t(State* start)
+{
+    returned.insert(start);
+    for(auto& transition : start->get_transitions())
+    {
+        if(transition.get_input() == EPSILON)
+        {
+            if(returned.find(transition.get_to()) == returned.end())
+            {
 
-            if (visited.find(to) == visited.end()) {
-                // Add the destination state to the epsilon closure set
-                closure.insert(to);
-
-                // Recursively perform epsilon closure on the destination state
-                e_closure_recursive(to, visited);
+                t(transition.get_to());
             }
         }
     }
 }
-
-// Function to calculate the epsilon closure of a given state
-set<State*> DFA::e_closure(State* s) {
-    // Clear the epsilon closure set
-    closure.clear();
-
-    // Set to keep track of visited states during epsilon closure calculation
-    set<State*> visited;
-
-    // Perform epsilon closure starting from the given state
-    e_closure_recursive(s, visited);
-
-    // Return the epsilon closure set
-    return closure;
-}
-
 
 // Function to calculate the epsilon closure of a set of states
 set<State*> DFA::e_closure(set<State*> T) {
-    // Set to store the epsilon closure of the input set of states
-    set<State*> T_closure;
+    set<State*> returned_set;
+    for (auto& state : T)
+    {
 
-    // Stack to perform depth-first search during epsilon closure calculation
-    stack<State*> stack;
-
-    // Push all states in T onto the stack
-    for (State* s : T) {
-        stack.push(s);
+        returned.clear();
+        t(state);
+        set<State*> s = returned;
+        returned_set.insert(s.begin(), s.end());
     }
-
-    // Perform depth-first search to compute epsilon closure
-    while (!stack.empty()) {
-        // Pop the top state from the stack
-        State* state = stack.top();
-        stack.pop();
-
-        // Calculate epsilon closure for the current state
-        set<State*> epsilon_closure_set = e_closure(state);
-
-        // Check if each state in the epsilon closure set is already in T_closure
-        for (State* s : epsilon_closure_set) {
-            // If the state is not in T_closure, add it and push it onto the stack
-            if (T_closure.find(s) == T_closure.end()) {
-                T_closure.insert(s);
-                stack.push(s);
-            }
-        }
-    }
-
-    // Return the final epsilon closure set for the input set of states
-    return T_closure;
+    return returned_set;
 }
 
 

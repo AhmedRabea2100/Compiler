@@ -126,6 +126,7 @@ string NFABuilder::expand(char c1, char c2)
         {
             result += '|';
         }
+        inputs.insert(c);
     }
     return result;
 }
