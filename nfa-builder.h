@@ -10,7 +10,7 @@ class NFABuilder
 {
 public:
     NFABuilder();
-    NFA build(Token *token);
+    NFA* build(Token *token);
     NFA build(vector<Token *> tokens);
     NFA get_NFA();
     unordered_set<char> get_inputs();

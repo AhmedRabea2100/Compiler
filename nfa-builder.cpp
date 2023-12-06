@@ -7,14 +7,14 @@ using namespace std;
 
 NFABuilder::NFABuilder() {}
 
-NFA NFABuilder::build(Token *token)
+NFA* NFABuilder::build(Token *token)
 {
-    stack<NFA> operands;
+    stack<NFA*> operands;
     for (auto &regexChar : token->getPostfixRegex())
     {
         if (regexChar->cType == CHAR)
         {
-            operands.push(NFA(regexChar->c));
+            operands.push(new NFA(regexChar->c));
             inputs.insert(regexChar->c);
         }
         else
@@ -23,76 +23,76 @@ NFA NFABuilder::build(Token *token)
             {
             case '|':
             {
-                NFA op2 = operands.top();
+                NFA* op2 = operands.top();
                 operands.pop();
 
-                NFA op1 = operands.top();
+                NFA* op1 = operands.top();
                 operands.pop();
 
-                NFA result = NFA::uni(op1, op2);
+                NFA* result = NFA::uni(op1, op2);
                 operands.push(result);
                 break;
             }
             case '$':
             {
-                NFA op2 = operands.top();
+                NFA* op2 = operands.top();
                 operands.pop();
 
-                NFA op1 = operands.top();
+                NFA* op1 = operands.top();
                 operands.pop();
 
-                NFA result = NFA::concat(op1, op2);
+                NFA* result = NFA::concat(op1, op2);
                 operands.push(result);
                 break;
             }
             case '*':
             {
-                NFA op = operands.top();
+                NFA* op = operands.top();
                 operands.pop();
 
-                NFA result = NFA::star(op);
+                NFA* result = NFA::star(op);
                 operands.push(result);
                 break;
             }
             case '+':
             {
-                NFA op = operands.top();
+                NFA* op = operands.top();
                 operands.pop();
 
-                NFA result = NFA::plus(op);
+                NFA* result = NFA::plus(op);
                 operands.push(result);
                 break;
             }
             case '-':
             {
-                NFA op2 = operands.top();
+                NFA* op2 = operands.top();
                 operands.pop();
 
-                NFA op1 = operands.top();
+                NFA* op1 = operands.top();
                 operands.pop();
 
-                char c1 = op1.start.get_transitions().at(0).get_input();
-                char c2 = op2.start.get_transitions().at(0).get_input();
+                char c1 = op1->start.get_transitions().at(0).get_input();
+                char c2 = op2->start.get_transitions().at(0).get_input();
 
                 string infix = expand(c1, c2);
                 vector<RegexChar *> postfix = GrammarParser::infixToPostfix(infix);
                 Token t = Token(0, "", postfix);
 
                 NFABuilder builder;
-                NFA result = builder.build(&t);
+                NFA* result = builder.build(&t);
                 operands.push(result);
                 break;
             }
             }
         }
     }
-    NFA *result = new NFA(operands.top());
+    NFA* result = operands.top();
     result->end.set_is_final(true);
     result->end.set_priority(token->getPriority());
     result->end.set_type(token->getType());
 
     start.add_transition(&result->start);
-    return *result;
+    return result;
 }
 
 NFA NFABuilder::build(vector<Token *> tokens)
