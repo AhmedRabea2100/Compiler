@@ -45,7 +45,7 @@ void State::set_type(string type)
     this->type = type;
 }
 
-vector<Transition> State::get_transitions()
+vector<Transition> State::get_transitions() const
 {
     return transitions;
 }

@@ -21,7 +21,7 @@ public:
     string get_type() const;
     void set_type(string type);
 
-    vector<Transition> get_transitions();
+    vector<Transition> get_transitions() const;
     void add_transition(Transition t);
     void add_transition(State *to, char input);
     void add_transition(State *to);
