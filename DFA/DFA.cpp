@@ -1,63 +1,17 @@
 
-
+#include <iostream>
 #include "DFA.h"
 #include <stack>
 #include <queue>
 #include "../NFA/NFABuilder.h"
 #include <algorithm>
-#include <iostream>
-
-
-//// Function to perform epsilon closure recursively starting from a given state
-//void DFA::e_closure_recursive(State *s, set<State*>& visited,set<State*>& closure) {
-//    // Mark the current state as visited
-//    visited.insert(s);
-//
-//    // Add the current state to the epsilon closure set
-//    closure.insert(s);
-//
-//    // Get all transitions from the current state
-//    const vector<Transition>& all_transition = s->get_transitions();
-//
-//    // Iterate through each transition
-//    for (Transition transition : all_transition) {
-//        // Check if the transition is an epsilon transition
-//        if (transition.get_input() == EPSILON) {
-//            // Retrieve the destination state of the epsilon transition
-//            auto* to = const_cast<State*>(transition.get_to());
-//            if (visited.find(to) == visited.end()) {
-////                cout <<"from: "<<transition.get_from()->get_id() <<"   to: " << to->get_id()<< "  input:  +" << transition.get_input() << "+  is_final "<< to->get_is_final()<< endl;
-//                // Add the destination state to the epsilon closure set
-//                closure.insert(to);
-//
-//                // Recursively perform epsilon closure on the destination state
-//                e_closure_recursive(to, visited, closure);
-//            }
-//        }
-//    }
-//}
-//
-//
-//// Function to calculate the epsilon closure of a given state
-//set<State*> DFA::e_closure(State* s) {
-//    // Clear the epsilon closure set
-//
-//    set<State*> closure;
-//
-//    // Set to keep track of visited states during epsilon closure calculation
-//    set<State*> visited;
-//
-//    // Perform epsilon closure starting from the given state
-//    e_closure_recursive(s, visited, closure);
-//
-//    // Return the epsilon closure set
-//    return closure;
-//}
 
 
 set<State*> returned;
 
-void DFA::t(State* start)
+
+// Function to calculate the epsilon closure of a state
+void DFA::e_closure(State* start)
 {
     returned.insert(start);
     for(auto& transition : start->get_transitions())
@@ -67,7 +21,7 @@ void DFA::t(State* start)
             if(returned.find(transition.get_to()) == returned.end())
             {
 
-                t(transition.get_to());
+                e_closure(transition.get_to());
             }
         }
     }
@@ -78,9 +32,8 @@ set<State*> DFA::e_closure(set<State*> T) {
     set<State*> returned_set;
     for (auto& state : T)
     {
-
         returned.clear();
-        t(state);
+        e_closure(state);
         set<State*> s = returned;
         returned_set.insert(s.begin(), s.end());
     }
@@ -90,19 +43,14 @@ set<State*> DFA::e_closure(set<State*> T) {
 
 // Function to calculate the move of a set of states given a specific input character
 set<State*> DFA::move(set<State*> T, char input) {
-    // Set to store the resulting set of states after applying the move operation
     set<State*> T_move;
 
-    // Iterate through each state in the input set T
     for (State* s : T) {
         // Get all transitions from the current state
         const vector<Transition>& all_transitions = s->get_transitions();
 
-        // Iterate through each transition of the current state
         for (Transition transition : all_transitions) {
-            // Check if the transition has the specified input character
             if (transition.get_input() == input) {
-                // Retrieve the destination state of the transition
                 auto* to = const_cast<State*>(transition.get_to());
 
                 // Add the destination state to the set T_move
@@ -110,8 +58,6 @@ set<State*> DFA::move(set<State*> T, char input) {
             }
         }
     }
-
-    // Return the resulting set of states after applying the move operation
     return T_move;
 }
 

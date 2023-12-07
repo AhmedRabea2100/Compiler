@@ -12,7 +12,6 @@ Dstates::Dstates(set<State*> U)
     // Flag to track whether an accepting state has been encountered
     bool flag = false;
 
-// Iterate over the set of states using a range-based for loop
     for (State* state : this->U) {
         // Check if the state is an accepting state
         if (state->get_is_final()) {
@@ -23,12 +22,10 @@ Dstates::Dstates(set<State*> U)
                 this->priority = state->get_priority();
             }
 
-            // Set the flag to true since an accepting state is found
             flag = true;
         }
     }
 
-    // If the set of states is empty, set the type to NONE
     if (U.empty()) {
         this->type = "";
     }
@@ -43,12 +40,12 @@ Dstates::Dstates()
 
 }
 
- int Dstates::get_id()
+ int Dstates::get_id() const
 {
     return id;
 }
 
- bool Dstates::get_is_final()
+ bool Dstates::get_is_final() const
 {
     return is_final;
 }
@@ -58,7 +55,7 @@ string Dstates::get_type()
         return type;
 }
 
-int Dstates::get_priority()
+int Dstates::get_priority() const
 {
         return priority;
 }

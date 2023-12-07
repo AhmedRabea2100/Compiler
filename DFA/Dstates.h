@@ -16,10 +16,10 @@ class Dstates
 public:
     Dstates(set<State*> U);
     Dstates();
-    int get_id() ;
-    bool get_is_final() ;
+    int get_id() const ;
+    bool get_is_final() const ;
     string get_type() ;
-    int get_priority() ;
+    int get_priority() const ;
     set<State*> get_U();
 
 
