@@ -28,7 +28,6 @@ std::vector<char> CodeParser::parseFile(std::string filename) {
 
     outputFile.open("output.txt");
     while (index < fileChars.size()) {
-        cout<<"rabea"<< endl;
         if (!match(currentState, index)) {
             outputFile << "ERROR" << std::endl;
             index++;
@@ -55,7 +54,6 @@ bool CodeParser::match(Dstate *state, int khara) {
         if (nextState->get_is_final()) {
             currentMatchIndex = i;
             currentMatchType = nextState->get_type(); // need to be fixed by changing type enum
-            cout << "Asdasdas" << nextState->get_type() << endl;
         }
         currentState = nextState;
         index = i;

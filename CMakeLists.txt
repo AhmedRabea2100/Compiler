@@ -4,7 +4,7 @@ project(Compiler)
 set(CMAKE_CXX_STANDARD 17)
 
 add_executable(Compiler main.cpp
-        Minimize.cpp 
+        MinimizeDFA/Minimize.cpp
         GrammarParser/Token.cpp
         GrammarParser/GrammarParser.cpp
         NFA/State.cpp

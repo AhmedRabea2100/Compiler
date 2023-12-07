@@ -45,12 +45,12 @@ Dstate::Dstate(int id)
 
 }
 
- int Dstate::get_id() const
+ int Dstate::get_id()
 {
     return id;
 }
 
- bool Dstate::get_is_final() const
+ bool Dstate::get_is_final()
 {
     return is_final;
 }
@@ -60,7 +60,7 @@ string Dstate::get_type()
         return type;
 }
 
-int Dstate::get_priority() const
+int Dstate::get_priority()
 {
         return priority;
 }

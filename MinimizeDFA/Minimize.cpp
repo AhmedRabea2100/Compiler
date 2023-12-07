@@ -1,8 +1,8 @@
 #include <iostream>
 #include "Minimize.h"
 
-set<Dstates *> Minimize::minimize(set<Dstates *> &dfa) {
-    vector<set<Dstates *>> partitions(1);
+set<Dstate *> Minimize::minimize(set<Dstate *> &dfa) {
+    vector<set<Dstate *>> partitions(1);
     map<int, int> partition_id;
     map<string, int> fin_mapping;
 
@@ -28,7 +28,7 @@ set<Dstates *> Minimize::minimize(set<Dstates *> &dfa) {
     bool changed = true;
     while (changed) {
         changed = false;
-        vector<set<Dstates *>> cur_partitions;
+        vector<set<Dstate *>> cur_partitions;
         map<int, int> cur_partition_id;
 
         for (auto &part: partitions) {
@@ -74,11 +74,11 @@ set<Dstates *> Minimize::minimize(set<Dstates *> &dfa) {
         partition_id = cur_partition_id;
     }
 
-    set<Dstates *> minimized_dfa;
-    vector<Dstates *> states;
+    set<Dstate *> minimized_dfa;
+    vector<Dstate *> states;
     int id = 0;
     for (auto &part: partitions) {
-        states.emplace_back(new Dstates(id++));
+        states.emplace_back(new Dstate(id++));
         states.back()->set_priority(-1);
     }
 
@@ -104,8 +104,8 @@ set<Dstates *> Minimize::minimize(set<Dstates *> &dfa) {
 }
 
 
-Dstates *Minimize::prepare_phai(Dstates *state) {
-    Dstates *phai = new Dstates(-1);
+Dstate *Minimize::prepare_phai(Dstate *state) {
+    Dstate *phai = new Dstate(-1);
     phai->set_type("");
     phai->set_final(false);
     for (auto [input, _]: state->transitions) {

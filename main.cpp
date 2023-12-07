@@ -7,13 +7,12 @@
 #include "./NFA/NFABuilder.h"
 #include "./DFA/DFA.h"
 #include "./CodeParser/CodeParser.h"
-#include "Minimize.h"
+#include "MInimizeDFA/Minimize.h"
 
 int main() {
-    GrammarParser grammarParser;
     // Read and parse grammar file
-    std::vector<Token *> tokens = grammarParser.getTokens(
-            R"(M:\CSED\YEAR 4\Compilers\Project\Compiler\lexical_grammar.txt)");
+    GrammarParser grammarParser;
+    std::vector<Token *> tokens = grammarParser.getTokens(R"(lexical_grammar.txt)");
     for (auto &token: tokens) {
         std::cout << token->getType() << " " << token->getPriority() << std::endl;
         for (auto &regexChar: token->getPostfixRegex()) {
@@ -22,13 +21,14 @@ int main() {
         std::cout << std::endl;
     }
 
+    // Build NFA
     NFABuilder builder;
     NFA nfa = builder.build(tokens);
     unordered_set<char> inputs = builder.get_inputs();
+
+    // Build DFA
     inputs.erase(' ');
-
     DFA dfa;
-
     auto start_time = std::chrono::high_resolution_clock::now();
     set<Dstate *> dfa_states = dfa.NFA_to_DFA({&nfa.start}, inputs);
     auto end_time = std::chrono::high_resolution_clock::now();
@@ -43,15 +43,16 @@ int main() {
         }
     }
     cout << "DFA   " << c << endl;
+
     // Output the duration in microseconds
     std::cout << "Time taken: " << duration.count() << " microseconds" << std::endl;
+
     cout << "DFA   " << dfa_states.size() << endl;
 
-    set<Dstates *> minimized_dfa = Minimize::minimize(dfa_states);
+    set<Dstate *> minimized_dfa = Minimize::minimize(dfa_states);
     cout << "Minimized DFA  " << minimized_dfa.size() << endl;
 
-//    CodeParser codeParser(dfa_states);
-//    codeParser.parseFile("D:/Last year/Project/Compiler/test_code.txt");
-    cout << "oooooo" << endl;
+    CodeParser codeParser(dfa_states);
+    codeParser.parseFile("test_code.txt");
 
 }

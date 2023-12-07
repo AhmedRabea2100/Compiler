@@ -1,18 +1,18 @@
 #ifndef COMPILER_MINIMIZE_H
 #define COMPILER_MINIMIZE_H
 
-#include "Dstates.h"
+#include "../DFA/Dstate.h"
 #include <set>
 
 class Minimize {
 
 public:
-    static set<Dstates *> minimize(set<Dstates *> &dfa);
+    static set<Dstate *> minimize(set<Dstate *> &dfa);
 
 protected:
 
 private:
-    static Dstates* prepare_phai(Dstates* state);
+    static Dstate* prepare_phai(Dstate* state);
 
 };
 
