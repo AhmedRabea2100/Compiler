@@ -5,6 +5,7 @@
 #include <queue>
 #include "../NFA/NFABuilder.h"
 #include <algorithm>
+#include "Dstate.h"
 
 
 set<State*> returned;
@@ -62,13 +63,14 @@ set<State*> DFA::move(set<State*> T, char input) {
 }
 
 
-set<Dstate*> DFA::NFA_to_DFA(set<State*> start_states, unordered_set<char> inputs) {
+set<Dstate *> DFA::NFA_to_DFA(set<State*> start_states, unordered_set<char> inputs) {
     queue<Dstate*> unmarked;
-    set<Dstate*> dfa_states;
+    vector<Dstate*> dfa_states;
+    map<set<State*>, Dstate*> set_of_states;
 
     // Create the initial Dstate
     Dstate* initial = new Dstate(e_closure(start_states));
-    dfa_states.insert(initial);
+    dfa_states.push_back(initial);
     unmarked.push(initial);
 
 
@@ -84,22 +86,20 @@ set<Dstate*> DFA::NFA_to_DFA(set<State*> start_states, unordered_set<char> input
                 continue;
             }
 
-            // Find U in dfa_states
-            auto it = find_if(dfa_states.begin(), dfa_states.end(),
-                              [&U](Dstate* d) { return d->get_U() == U; });
-
-            if (it == dfa_states.end()) {
-                // U not found, create a new Dstate
+            if (set_of_states.find(U) == set_of_states.end()) {
+                // U not found, create a new Dstates
                 Dstate* dest = new Dstate(U);
-                dfa_states.insert(dest);
+                dfa_states.push_back(dest);
                 unmarked.push(dest);
                 T->set_transation(input, dest);
+                set_of_states[U] = dest;
             } else {
-                // U found, set the transition to the existing Dstate
-                T->set_transation(input, *it);
+                // U found, set the transition to the existing Dstates
+                T->set_transation(input, set_of_states[U]);
             }
         }
     }
+    set<Dstate*> dfa_states_set = set<Dstate*>(dfa_states.begin(), dfa_states.end());
 
-    return dfa_states;
+    return dfa_states_set;
 }
