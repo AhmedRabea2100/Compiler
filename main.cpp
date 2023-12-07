@@ -3,7 +3,7 @@
 #include <unordered_set>
 #include "./GrammarParser/GrammarParser.h"
 #include "./GrammarParser/Token.h"
-#include "nfa-builder.h"
+#include "./NFA/NFABuilder.h"
 #include "DFA.h"
 #include <chrono>
 #include "CodeParser.h"

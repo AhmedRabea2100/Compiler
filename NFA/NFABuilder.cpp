@@ -1,8 +1,6 @@
-#include <string>
-#include <vector>
 #include <stack>
-#include "nfa-builder.h"
-#include "./GrammarParser/GrammarParser.h"
+#include "NFABuilder.h"
+#include "../GrammarParser/GrammarParser.h"
 using namespace std;
 
 NFABuilder::NFABuilder() {}
@@ -91,7 +89,6 @@ NFA* NFABuilder::build(Token *token)
     result->end.set_is_final(true);
     result->end.set_priority(token->getPriority());
     result->end.set_type(token->getType());
-
     return result;
 }
 

@@ -1,4 +1,4 @@
-#include "nfa.h"
+#include "NFA.h"
 
 NFA::NFA() {}
 

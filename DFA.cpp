@@ -1,10 +1,9 @@
 
 
 #include "DFA.h"
-#include "state.h"
 #include <stack>
 #include <queue>
-#include "nfa-builder.h"
+#include "./NFA/NFABuilder.h"
 #include <algorithm>
 #include <iostream>
 

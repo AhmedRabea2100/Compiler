@@ -1,8 +1,8 @@
 #ifndef COMPILER_DFA_H
 #define COMPILER_DFA_H
 
-#include "state.h"
-#include "transition.h"
+#include "./NFA/State.h"
+#include "./NFA/Transition.h"
 #include "Dstates.h"
 #include <vector>
 #include <map>

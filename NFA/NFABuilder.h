@@ -1,9 +1,10 @@
 #pragma once
+#include <string>
 #include <vector>
-#include "state.h"
 #include <unordered_set>
-#include "nfa.h"
-#include "./GrammarParser/Token.h"
+#include "State.h"
+#include "NFA.h"
+#include "../GrammarParser/Token.h"
 using namespace std;
 
 class NFABuilder
