@@ -5,7 +5,7 @@
 #include <string>
 #include <fstream>
 #include <iostream>
-#include "DFA/Dstates.h"
+#include "../DFA/Dstates.h"
 
 class CodeParser {
 public:
