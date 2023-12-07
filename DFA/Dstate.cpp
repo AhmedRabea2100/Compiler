@@ -1,18 +1,17 @@
 
 
 
-#include "Dstates.h"
+#include "Dstate.h"
 
-int Dstates::id_generator = 0;
+int Dstate::id_generator = 0;
 
-Dstates::Dstates(set<State*> U)
+Dstate::Dstate(set<State*> U)
         : id(id_generator++), is_final(false), type(""), priority(-1)
 {
     this->U = U;
     // Flag to track whether an accepting state has been encountered
     bool flag = false;
 
-// Iterate over the set of states using a range-based for loop
     for (State* state : this->U) {
         // Check if the state is an accepting state
         if (state->get_is_final()) {
@@ -23,12 +22,10 @@ Dstates::Dstates(set<State*> U)
                 this->priority = state->get_priority();
             }
 
-            // Set the flag to true since an accepting state is found
             flag = true;
         }
     }
 
-    // If the set of states is empty, set the type to NONE
     if (U.empty()) {
         this->type = "";
     }
@@ -38,61 +35,61 @@ Dstates::Dstates(set<State*> U)
 
 }
 
-Dstates::Dstates()
+Dstate::Dstate()
         : id(-1), is_final(false){
 
 }
 
-Dstates::Dstates(int id)
+Dstate::Dstate(int id)
         : id(id), is_final(false){
 
 }
 
- int Dstates::get_id()
+ int Dstate::get_id() const
 {
     return id;
 }
 
- bool Dstates::get_is_final()
+ bool Dstate::get_is_final() const
 {
     return is_final;
 }
 
-string Dstates::get_type()
+string Dstate::get_type()
 {
         return type;
 }
 
-int Dstates::get_priority()
+int Dstate::get_priority() const
 {
         return priority;
 }
 
-set<State*> Dstates::get_U()
+set<State*> Dstate::get_U()
 {
         return U;
 }
 
-void Dstates::set_final(bool is_final) {
+void Dstate::set_final(bool is_final) {
     this->is_final = is_final;
 }
 
 
 
-void Dstates::set_priority(int p) {
+void Dstate::set_priority(int p) {
     this->priority = p ;
 }
 
-void Dstates::set_type(string type){
+void Dstate::set_type(string type){
     this->type = type;
 }
 
-void Dstates::set_transation(char input, Dstates *to) {
+void Dstate::set_transation(char input, Dstate *to) {
     transitions[input] = to;
 }
 
-Dstates* Dstates::get_transation(char input) {
+Dstate* Dstate::get_transation(char input) {
     if(transitions.find(input) != transitions.end())
         return transitions[input];
-    return new Dstates();
+    return new Dstate();
 }

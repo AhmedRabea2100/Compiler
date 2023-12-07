@@ -4,16 +4,14 @@ project(Compiler)
 set(CMAKE_CXX_STANDARD 17)
 
 add_executable(Compiler main.cpp
-        DFA.h
-        DFA.cpp
-        Dstates.h
-        Dstates.cpp Minimize.cpp Minimize.h
-
+        Minimize.cpp 
         GrammarParser/Token.cpp
         GrammarParser/GrammarParser.cpp
-        state.cpp
-        transition.cpp
-        nfa.cpp
-        nfa-builder.cpp
-        CodeParser.cpp
+        NFA/State.cpp
+        NFA/Transition.cpp
+        NFA/NFA.cpp
+        NFA/NFABuilder.cpp
+        DFA/Dstate.cpp
+        DFA/DFA.cpp
+        CodeParser/CodeParser.cpp
 )

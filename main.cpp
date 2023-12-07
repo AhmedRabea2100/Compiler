@@ -1,12 +1,12 @@
 #include <iostream>
 #include <vector>
 #include <unordered_set>
+#include <chrono>
 #include "./GrammarParser/GrammarParser.h"
 #include "./GrammarParser/Token.h"
-#include "nfa-builder.h"
-#include "DFA.h"
-#include <chrono>
-#include "CodeParser.h"
+#include "./NFA/NFABuilder.h"
+#include "./DFA/DFA.h"
+#include "./CodeParser/CodeParser.h"
 #include "Minimize.h"
 
 int main() {
@@ -30,7 +30,7 @@ int main() {
     DFA dfa;
 
     auto start_time = std::chrono::high_resolution_clock::now();
-    set<Dstates *> dfa_states = dfa.NFA_to_DFA({&nfa.start}, inputs);
+    set<Dstate *> dfa_states = dfa.NFA_to_DFA({&nfa.start}, inputs);
     auto end_time = std::chrono::high_resolution_clock::now();
 
     // Calculate the duration
@@ -53,6 +53,5 @@ int main() {
 //    CodeParser codeParser(dfa_states);
 //    codeParser.parseFile("D:/Last year/Project/Compiler/test_code.txt");
     cout << "oooooo" << endl;
-
 
 }
