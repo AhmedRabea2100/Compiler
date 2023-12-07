@@ -77,8 +77,12 @@ set<Dstate *> Minimize::minimize(set<Dstate *> &dfa) {
     set<Dstate *> minimized_dfa;
     vector<Dstate *> states;
     int id = 0;
-    for (auto &part: partitions) {
-        states.emplace_back(new Dstate(id++));
+    int phai_partition = partition_id[-1];
+    for (int i = 0; i < partitions.size(); i++) {
+        if (i == phai_partition)
+            states.emplace_back(new Dstate(-1));
+        else
+            states.emplace_back(new Dstate(id++));
         states.back()->set_priority(-1);
     }
 
