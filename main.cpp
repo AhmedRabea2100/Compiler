@@ -4,7 +4,7 @@
 #include "./GrammarParser/GrammarParser.h"
 #include "./GrammarParser/Token.h"
 #include "./NFA/NFABuilder.h"
-#include "DFA/DFA.h"
+#include "./DFA/DFA.h"
 #include <chrono>
 #include "CodeParser/CodeParser.h"
 
