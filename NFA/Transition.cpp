@@ -9,17 +9,17 @@ Transition::Transition(State *from, State *to)
     : from(from), to(to), input(EPSILON)
 {}
 
-const State *Transition::get_from()
+ State *Transition::get_from()
 {
     return from;
 }
 
-const State *Transition::get_to()
+ State *Transition::get_to()
 {
     return to;
 }
 
-const char Transition::get_input()
+ char Transition::get_input()
 {
     return input;
 }

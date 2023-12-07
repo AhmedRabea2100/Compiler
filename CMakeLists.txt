@@ -10,4 +10,8 @@ add_executable(Compiler main.cpp
         NFA/Transition.cpp
         NFA/NFA.cpp
         NFA/NFABuilder.cpp
+        DFA/Dstate.cpp
+        DFA/DFA.cpp
+
+        CodeParser/CodeParser.cpp
 )

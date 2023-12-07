@@ -9,12 +9,12 @@ public:
     Transition(State *from, State *to, char input);
     Transition(State *from, State *to);
 
-    const State *get_from();
-    const State *get_to();
-    const char get_input();
+     State *get_from();
+     State *get_to();
+     char get_input();
 
 private:
-    const State *from;
-    const State *to;
-    const char input;
+     State *from;
+     State *to;
+     char input;
 };
