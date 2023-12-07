@@ -4,14 +4,14 @@
 #include "./GrammarParser/GrammarParser.h"
 #include "./GrammarParser/Token.h"
 #include "./NFA/NFABuilder.h"
-#include "DFA.h"
+#include "DFA/DFA.h"
 #include <chrono>
-#include "CodeParser.h"
+#include "CodeParser/CodeParser.h"
 
 int main() {
     GrammarParser grammarParser;
     // Read and parse grammar file
-    std::vector<Token *> tokens = grammarParser.getTokens("D:/Last year/Project/Compiler/lexical_grammar.txt");
+    std::vector<Token *> tokens = grammarParser.getTokens("lexical_grammar.txt");
     for(auto &token : tokens) {
         std::cout << token->getType() << " " << token->getPriority()<< std::endl;
         for(auto& regexChar : token->getPostfixRegex()) {
@@ -39,8 +39,7 @@ int main() {
 
 
     CodeParser codeParser(dfa_states);
-    codeParser.parseFile("D:/Last year/Project/Compiler/test_code.txt");
+    codeParser.parseFile("test_code.txt");
     cout<< "oooooo" << endl;
-
 
 }
