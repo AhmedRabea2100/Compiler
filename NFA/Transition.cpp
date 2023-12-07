@@ -1,5 +1,5 @@
-#include "transition.h"
-#include "state.h"
+#include "Transition.h"
+#include "State.h"
 
 Transition::Transition(State *from, State *to, char input)
     : from(from), to(to), input(input)

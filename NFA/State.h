@@ -1,7 +1,7 @@
 #pragma once
-#include "transition.h"
 #include <vector>
 #include <string>
+#include "Transition.h"
 using namespace std;
 
 class State

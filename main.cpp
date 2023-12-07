@@ -2,7 +2,7 @@
 #include <vector>
 #include "./GrammarParser/GrammarParser.h"
 #include "./GrammarParser/Token.h"
-#include "nfa-builder.h"
+#include "./NFA/NFABuilder.h"
 
 int main() {
     GrammarParser grammarParser;
