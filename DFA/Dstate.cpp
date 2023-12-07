@@ -1,11 +1,11 @@
 
 
 
-#include "Dstates.h"
+#include "Dstate.h"
 
-int Dstates::id_generator = 0;
+int Dstate::id_generator = 0;
 
-Dstates::Dstates(set<State*> U)
+Dstate::Dstate(set<State*> U)
         : id(id_generator++), is_final(false), type(""), priority(-1)
 {
     this->U = U;
@@ -35,42 +35,42 @@ Dstates::Dstates(set<State*> U)
 
 }
 
-Dstates::Dstates()
+Dstate::Dstate()
         : id(-1), is_final(false){
 
 }
 
- int Dstates::get_id() const
+ int Dstate::get_id() const
 {
     return id;
 }
 
- bool Dstates::get_is_final() const
+ bool Dstate::get_is_final() const
 {
     return is_final;
 }
 
-string Dstates::get_type()
+string Dstate::get_type()
 {
         return type;
 }
 
-int Dstates::get_priority() const
+int Dstate::get_priority() const
 {
         return priority;
 }
 
-set<State*> Dstates::get_U()
+set<State*> Dstate::get_U()
 {
         return U;
 }
 
-void Dstates::set_transation(char input, Dstates *to) {
+void Dstate::set_transation(char input, Dstate *to) {
     transitions[input] = to;
 }
 
-Dstates* Dstates::get_transation(char input) {
+Dstate* Dstate::get_transation(char input) {
     if(transitions.find(input) != transitions.end())
         return transitions[input];
-    return new Dstates();
+    return new Dstate();
 }

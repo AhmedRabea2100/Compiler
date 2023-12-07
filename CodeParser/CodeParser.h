@@ -5,16 +5,16 @@
 #include <string>
 #include <fstream>
 #include <iostream>
-#include "../DFA/Dstates.h"
+#include "../DFA/Dstate.h"
 
 class CodeParser {
 public:
-    CodeParser(set<Dstates*> states);
+    CodeParser(set<Dstate*> states);
     std::vector<char> parseFile(std::string fileName);
 
 private:
-    static bool match(Dstates *state, int index);
-    std::set<Dstates*> minStates;
+    static bool match(Dstate *state, int index);
+    std::set<Dstate*> minStates;
 };
 
 #endif //COMPILER_CODEPARSER_H

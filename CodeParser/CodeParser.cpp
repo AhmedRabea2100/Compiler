@@ -4,7 +4,7 @@ std::vector<char> fileChars;
 std::ofstream outputFile;
 int index = 0;
 
-CodeParser::CodeParser(set<Dstates *> states): minStates(states) {}
+CodeParser::CodeParser(set<Dstate *> states): minStates(states) {}
 
 std::vector<char> CodeParser::parseFile(std::string filename) {
     std::ifstream file(filename);
@@ -18,7 +18,7 @@ std::vector<char> CodeParser::parseFile(std::string filename) {
 
 
     // get intial state
-    Dstates *currentState;
+    Dstate *currentState;
     for (auto &state: minStates) {
         if (state->get_id() == 0) {
             currentState = state;
@@ -38,8 +38,8 @@ std::vector<char> CodeParser::parseFile(std::string filename) {
     return fileChars;
 }
 
-bool CodeParser::match(Dstates *state, int khara) {
-    Dstates *currentState = state, *nextState = nullptr;
+bool CodeParser::match(Dstate *state, int khara) {
+    Dstate *currentState = state, *nextState = nullptr;
     char c;
     std::string currentMatchType = "";
     int currentMatchIndex = -1;

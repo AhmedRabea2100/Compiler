@@ -1,6 +1,6 @@
 
-#ifndef COMPILER_DSTATES_H
-#define COMPILER_DSTATES_H
+#ifndef COMPILER_DSTATE_H
+#define COMPILER_DSTATE_H
 
 #include "../NFA/State.h"
 
@@ -11,11 +11,11 @@
 
 using namespace std;
 
-class Dstates
+class Dstate
 {
 public:
-    Dstates(set<State*> U);
-    Dstates();
+    Dstate(set<State*> U);
+    Dstate();
     int get_id() const ;
     bool get_is_final() const ;
     string get_type() ;
@@ -23,10 +23,10 @@ public:
     set<State*> get_U();
 
 
-    void set_transation(char input, Dstates* to);
-    Dstates* get_transation(char input);
+    void set_transation(char input, Dstate* to);
+    Dstate* get_transation(char input);
 
-    map<char, Dstates*> transitions;
+    map<char, Dstate*> transitions;
 
 
 protected:
@@ -44,5 +44,5 @@ private:
 
 
 
-#endif //COMPILER_DSTATES_H
+#endif //COMPILER_DSTATE_H
 

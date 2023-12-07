@@ -3,7 +3,7 @@
 
 #include "../NFA/State.h"
 #include "../NFA/Transition.h"
-#include "Dstates.h"
+#include "Dstate.h"
 #include <vector>
 #include <map>
 #include <set>
@@ -17,7 +17,7 @@ public:
     void e_closure(State* s);
     set<State*> e_closure(set<State*> T);
     set<State*> move(set<State*> T, char input);
-    set<Dstates*> NFA_to_DFA(set<State*> start_states,unordered_set<char> inputs);
+    set<Dstate*> NFA_to_DFA(set<State*> start_states, unordered_set<char> inputs);
 protected:
 
 private:
