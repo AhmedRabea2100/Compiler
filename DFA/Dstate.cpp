@@ -40,12 +40,17 @@ Dstate::Dstate()
 
 }
 
- int Dstate::get_id() const
+Dstate::Dstate(int id)
+        : id(id), is_final(false){
+
+}
+
+ int Dstate::get_id()
 {
     return id;
 }
 
- bool Dstate::get_is_final() const
+ bool Dstate::get_is_final()
 {
     return is_final;
 }
@@ -55,7 +60,7 @@ string Dstate::get_type()
         return type;
 }
 
-int Dstate::get_priority() const
+int Dstate::get_priority()
 {
         return priority;
 }
@@ -63,6 +68,20 @@ int Dstate::get_priority() const
 set<State*> Dstate::get_U()
 {
         return U;
+}
+
+void Dstate::set_final(bool is_final) {
+    this->is_final = is_final;
+}
+
+
+
+void Dstate::set_priority(int p) {
+    this->priority = p ;
+}
+
+void Dstate::set_type(string type){
+    this->type = type;
 }
 
 void Dstate::set_transation(char input, Dstate *to) {

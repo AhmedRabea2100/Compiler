@@ -1,23 +1,23 @@
-int
-id
-,
-id
-,
-id
-,
-id
-;
-while
-(
-id
-relop
-num
-)
-{
-id
-assign
-id
-addop
-num
-;
-}
+Token: int                      Type: int
+Token: sum                      Type: id
+Token: ,                        Type: ,
+Token: count                    Type: id
+Token: ,                        Type: ,
+Token: pass                     Type: id
+Token: ,                        Type: ,
+Token: mnt                      Type: id
+Token: ;                        Type: ;
+Token: while                    Type: while
+Token: (                        Type: (
+Token: pass                     Type: id
+Token: !=                       Type: relop
+Token: 10                       Type: num
+Token: )                        Type: )
+Token: {                        Type: {
+Token: pass                     Type: id
+Token: =                        Type: assign
+Token: pass                     Type: id
+Token: +                        Type: addop
+Token: 1                        Type: num
+Token: ;                        Type: ;
+Token: }                        Type: }
