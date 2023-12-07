@@ -2,7 +2,7 @@
 #ifndef COMPILER_DSTATES_H
 #define COMPILER_DSTATES_H
 
-#include "./NFA/State.h"
+#include "../NFA/State.h"
 
 #include <string>
 #include <vector>
@@ -16,10 +16,10 @@ class Dstates
 public:
     Dstates(set<State*> U);
     Dstates();
-    int get_id() ;
-    bool get_is_final() ;
+    int get_id() const ;
+    bool get_is_final() const ;
     string get_type() ;
-    int get_priority() ;
+    int get_priority() const ;
     set<State*> get_U();
 
 
