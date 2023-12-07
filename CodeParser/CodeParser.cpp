@@ -3,6 +3,7 @@
 std::vector<char> fileChars;
 std::ofstream outputFile;
 int index = 0;
+unordered_map<std::string , std::string> symbolTable;
 
 CodeParser::CodeParser(set<Dstate *> states): minStates(states) {}
 
@@ -29,7 +30,7 @@ std::vector<char> CodeParser::parseFile(std::string filename) {
     outputFile.open("output.txt");
     while (index < fileChars.size()) {
         if (!match(currentState, index)) {
-            outputFile << "ERROR" << std::endl;
+            outputFile << "ERROR: " << fileChars[index] << std::endl;
             index++;
         }
     }
@@ -37,15 +38,15 @@ std::vector<char> CodeParser::parseFile(std::string filename) {
     return fileChars;
 }
 
-bool CodeParser::match(Dstate *state, int khara) {
+bool CodeParser::match(Dstate *state, int startIndex) {
     Dstate *currentState = state, *nextState = nullptr;
     char c;
     std::string currentMatchType = "";
+    std::string currentMatch = "";
     int currentMatchIndex = -1;
 
-
     // loop on all chars
-    for (int i = khara; i < fileChars.size(); i++) {
+    for (int i = startIndex; i < fileChars.size(); i++) {
         c = fileChars[i];
         if (currentState->transitions.find(c) == currentState->transitions.end() || iswspace(c) || currentState->get_id() == -1)
             break;
@@ -53,7 +54,7 @@ bool CodeParser::match(Dstate *state, int khara) {
         nextState = currentState->transitions[c];
         if (nextState->get_is_final()) {
             currentMatchIndex = i;
-            currentMatchType = nextState->get_type(); // need to be fixed by changing type enum
+            currentMatchType = nextState->get_type();
         }
         currentState = nextState;
         index = i;
@@ -65,7 +66,15 @@ bool CodeParser::match(Dstate *state, int khara) {
     else if (currentMatchIndex == -1)
         return false;
     else {
-        outputFile << currentMatchType << std::endl;
+        for(int j = startIndex; j <= currentMatchIndex; j++) {
+            currentMatch += fileChars[j];
+        }
+        symbolTable[currentMatch] = currentMatchType;
+        outputFile << "Token: "  << currentMatch;
+        for(int i = 0; i < 25 - currentMatch.size(); i++) {
+            outputFile << " ";
+        }
+        outputFile << "Type: " << currentMatchType << std::endl;
         index = currentMatchIndex+ 1;
     }
     return true;

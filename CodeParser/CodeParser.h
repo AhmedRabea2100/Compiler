@@ -6,7 +6,7 @@
 #include <fstream>
 #include <iostream>
 #include "../DFA/Dstate.h"
-
+#include <unordered_map>
 class CodeParser {
 public:
     CodeParser(set<Dstate*> states);
