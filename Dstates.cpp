@@ -44,7 +44,7 @@ Dstates::Dstates()
 }
 
 Dstates::Dstates(int id)
-        : id(id){
+        : id(id), is_final(false){
 
 }
 

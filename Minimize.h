@@ -7,10 +7,12 @@
 class Minimize {
 
 public:
-    static set<Dstates*> minimize(const set<Dstates*>& dfa) ;
+    static set<Dstates *> minimize(set<Dstates *> &dfa);
+
 protected:
 
 private:
+    static Dstates* prepare_phai(Dstates* state);
 
 };
 
