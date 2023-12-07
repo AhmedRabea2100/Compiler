@@ -13,6 +13,7 @@ class GrammarParser {
 public:
     GrammarParser();
     std::vector<Token *> getTokens(std::string grammarFilePath);
+    static std::vector<RegexChar*> infixToPostfix(std::string str);
 
 private:
     static bool checkReserved(std::string str);
@@ -23,7 +24,6 @@ private:
     static void handleRegularExpression(std::string str, int priority);
     static bool checkRegularDefinition(std::string str);
     static void handleRegularDefinition(std::string str);
-    static std::vector<RegexChar*> infixToPostfix(std::string str);
     static std::string addConcatenateSymbol(std::string str);
     static std::string replaceVariableWithRegex(std::string str);
     static std::string trim(std::string str, std::string whitespace);
