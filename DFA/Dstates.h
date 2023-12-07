@@ -2,7 +2,7 @@
 #ifndef COMPILER_DSTATES_H
 #define COMPILER_DSTATES_H
 
-#include "./NFA/State.h"
+#include "../NFA/State.h"
 
 #include <string>
 #include <vector>

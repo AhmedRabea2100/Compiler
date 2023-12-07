@@ -3,7 +3,7 @@
 #include "DFA.h"
 #include <stack>
 #include <queue>
-#include "./NFA/NFABuilder.h"
+#include "../NFA/NFABuilder.h"
 #include <algorithm>
 #include <iostream>
 

@@ -26,7 +26,7 @@ std::vector<char> CodeParser::parseFile(std::string filename) {
         }
     }
 
-    outputFile.open("D:/Last year/Project/Compiler/output.txt");
+    outputFile.open("output.txt");
     while (index < fileChars.size()) {
         cout<<"rabea"<< endl;
         if (!match(currentState, index)) {
