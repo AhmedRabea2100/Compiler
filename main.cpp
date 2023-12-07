@@ -7,7 +7,7 @@
 #include "./NFA/NFABuilder.h"
 #include "./DFA/DFA.h"
 #include "./CodeParser/CodeParser.h"
-#include "MInimizeDFA/Minimize.h"
+#include "MinimizeDFA/Minimize.h"
 
 int main() {
     // Read and parse grammar file
