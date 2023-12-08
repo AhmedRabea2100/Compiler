@@ -32,7 +32,7 @@ int main()
 
     // Write transition table
     TransitionTableWritter writter;
-    writter.write(minimized_dfa, inputs, "transition_table.txt");
+    writter.write(minimized_dfa, inputs);
     cout << "Finished writing transition table" << endl;
     
     // Parse code

@@ -2,10 +2,10 @@
 #include "TransitionTableWritter.h"
 using namespace std;
 
-void TransitionTableWritter::write(set<Dstate *> dfa, unordered_set<char> inputs, string fileName)
+void TransitionTableWritter::write(set<Dstate *> dfa, unordered_set<char> inputs)
 {
     // Open file
-    file.open(fileName);
+    file.open("transition_table.txt");
 
     // Sort inputs
     vector<char> sorted_inputs;

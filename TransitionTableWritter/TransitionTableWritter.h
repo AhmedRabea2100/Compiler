@@ -9,7 +9,7 @@ using namespace std;
 class TransitionTableWritter
 {
 public:
-    void write(set<Dstate *> minimized_dfa, unordered_set<char> inputs, string fileName);
+    void write(set<Dstate *> minimized_dfa, unordered_set<char> inputs);
 
 private:
     ofstream file;
