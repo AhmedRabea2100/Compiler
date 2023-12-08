@@ -14,4 +14,5 @@ add_executable(Compiler main.cpp
         DFA/Dstate.cpp
         DFA/DFA.cpp
         CodeParser/CodeParser.cpp
+        TransitionTableWritter/TransitionTableWritter.cpp
 )

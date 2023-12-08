@@ -7,7 +7,8 @@
 #include "./NFA/NFABuilder.h"
 #include "./DFA/DFA.h"
 #include "./CodeParser/CodeParser.h"
-#include "MinimizeDFA/Minimize.h"
+#include "./MinimizeDFA/Minimize.h"
+#include "./TransitionTableWritter/TransitionTableWritter.h"
 
 int main() {
     // Read and parse grammar file
@@ -52,7 +53,9 @@ int main() {
     set<Dstate *> minimized_dfa = Minimize::minimize(dfa_states);
     cout << "Minimized DFA  " << minimized_dfa.size() << endl;
 
-    CodeParser codeParser(dfa_states);
+    CodeParser codeParser(minimized_dfa);
     codeParser.parseFile("test_code.txt");
 
+    TransitionTableWritter writter;
+    writter.write(minimized_dfa, inputs, "transition_table.txt");
 }
