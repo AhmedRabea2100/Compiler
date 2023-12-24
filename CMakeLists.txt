@@ -13,6 +13,7 @@ add_executable(Compiler main.cpp
         NFA/NFABuilder.cpp
         DFA/Dstate.cpp
         DFA/DFA.cpp
-        CodeParser/CodeParser.cpp
-        TransitionTableWritter/TransitionTableWritter.cpp
+        LexicalCodeParser/CodeParser.cpp
+        OutputWritter/OutputWritter.cpp
+        LexicalCodeParser/Tokenizer.cpp
 )

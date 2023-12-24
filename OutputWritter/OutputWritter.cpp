@@ -1,12 +1,23 @@
 #include <algorithm>
-#include "TransitionTableWritter.h"
+#include "OutputWritter.h"
 using namespace std;
 
-void TransitionTableWritter::write(set<Dstate *> dfa, unordered_set<char> inputs)
-{
-    // Open file
-    file.open("transition_table.txt");
+OutputWritter::OutputWritter(std::string fileName){
+    file.open(fileName);
+}
 
+void OutputWritter::writeMatch(std::string currentMatch, std::string currentMatchType) {
+        file << "Token: "  << currentMatch;
+        for(int i = 0; i < 25 - currentMatch.size(); i++)
+            file << " ";
+        file << "Type: " << currentMatchType << std::endl;
+}
+
+void OutputWritter::writeError(std::string error) {
+    file << error << std::endl;
+}
+
+void OutputWritter::writeTransitionTable(set<Dstate *> minimized_dfa, unordered_set<char> inputs){
     // Sort inputs
     vector<char> sorted_inputs;
     for (auto input : inputs)
@@ -25,7 +36,7 @@ void TransitionTableWritter::write(set<Dstate *> dfa, unordered_set<char> inputs
 
     // Sort states by id
     vector<Dstate *> sorted_states;
-    for (auto state : dfa)
+    for (auto state : minimized_dfa)
         sorted_states.push_back(state);
     sort(sorted_states.begin(), sorted_states.end(), [](Dstate *a, Dstate *b)
          { return a->get_id() < b->get_id(); });
@@ -57,18 +68,18 @@ void TransitionTableWritter::write(set<Dstate *> dfa, unordered_set<char> inputs
     }
 
     drawLine(sorted_inputs.size() * 4 + 15);
+}
 
-    // Close file
+void OutputWritter::closeFile() {
     file.close();
 }
 
-void TransitionTableWritter::fillSpaces(int length)
-{
+void OutputWritter::fillSpaces(int length){
     for (int i = 0; i < length; i++)
         file << " ";
 }
 
-void TransitionTableWritter::drawLine(int length)
+void OutputWritter::drawLine(int length)
 {
     for (int i = 0; i < length; i++)
         file << "-";

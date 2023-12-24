@@ -4,12 +4,12 @@
 #include "./GrammarParser/Token.h"
 #include "./NFA/NFABuilder.h"
 #include "./DFA/DFA.h"
-#include "./CodeParser/CodeParser.h"
+#include "./LexicalCodeParser/CodeParser.h"
 #include "./MinimizeDFA/Minimize.h"
-#include "./TransitionTableWritter/TransitionTableWritter.h"
+#include "./OutputWritter//OutputWritter.h"
+#include "./LexicalCodeParser/Tokenizer.h"
 
-int main()
-{
+int main(){
     // Read and parse grammar file
     GrammarParser grammarParser;
     std::vector<Token *> tokens = grammarParser.getTokens(R"(lexical_grammar.txt)");
@@ -31,11 +31,17 @@ int main()
     cout << "Finished minimizing DFA" << endl;
 
     // Write transition table
-    TransitionTableWritter writter;
-    writter.write(minimized_dfa, inputs);
+    OutputWritter tableWritter("transition_table.txt");
+    tableWritter.writeTransitionTable(minimized_dfa, inputs);
+    tableWritter.closeFile();
     cout << "Finished writing transition table" << endl;
     
     // Parse code
-    CodeParser codeParser(minimized_dfa);
-    codeParser.parseFile("test_code.txt");
+    auto *lexicalAnalyzerWritter = new OutputWritter("lexical_analyzer_output.txt");
+    Tokenizer tokenizer(minimized_dfa, "test_code.txt", lexicalAnalyzerWritter);
+    while(tokenizer.hasTokens()){
+        TokenWithLexeme token = tokenizer.getNextToken();
+        cout << token.type << " " << token.lexeme << endl;
+    }
+    lexicalAnalyzerWritter->closeFile();
 }
