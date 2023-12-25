@@ -3,7 +3,8 @@ project(Compiler)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(Compiler main.cpp
+add_executable(Compiler
+        main.cpp
         MinimizeDFA/Minimize.cpp
         GrammarParser/Token.cpp
         GrammarParser/GrammarParser.cpp
@@ -16,4 +17,5 @@ add_executable(Compiler main.cpp
         LexicalCodeParser/CodeParser.cpp
         OutputWritter/OutputWritter.cpp
         LexicalCodeParser/Tokenizer.cpp
+        ContextFreeGrammarParser/CFGParser.cpp
 )

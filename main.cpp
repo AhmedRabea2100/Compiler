@@ -6,8 +6,10 @@
 #include "./DFA/DFA.h"
 #include "./LexicalCodeParser/CodeParser.h"
 #include "./MinimizeDFA/Minimize.h"
-#include "./OutputWritter//OutputWritter.h"
+#include "./OutputWritter/OutputWritter.h"
 #include "./LexicalCodeParser/Tokenizer.h"
+#include "./ContextFreeGrammarParser/CFGParser.h"
+
 
 int main(){
     // Read and parse grammar file
@@ -21,7 +23,7 @@ int main(){
     cout << "Finished building NFA" << endl;
 
     // Build DFA
-    inputs.erase(EPSILON);
+    inputs.erase(EPSILON_CHAR);
     DFA dfa;
     set<Dstate *> dfa_states = dfa.NFA_to_DFA({&nfa.start}, inputs);
     cout << "Finished building DFA" << endl;
@@ -35,13 +37,19 @@ int main(){
     tableWritter.writeTransitionTable(minimized_dfa, inputs);
     tableWritter.closeFile();
     cout << "Finished writing transition table" << endl;
-    
+
+    // -----------------------------------------------------------------------------------------------------------------------------------
+
     // Parse code
     auto *lexicalAnalyzerWritter = new OutputWritter("lexical_analyzer_output.txt");
     Tokenizer tokenizer(minimized_dfa, "test_code.txt", lexicalAnalyzerWritter);
     while(tokenizer.hasTokens()){
         TokenWithLexeme token = tokenizer.getNextToken();
-        cout << token.type << " " << token.lexeme << endl;
+//        cout << token.type << " " << token.lexeme << endl;
     }
     lexicalAnalyzerWritter->closeFile();
+
+    // Parse Context Free Grammar
+    CFGParser cfgParser;
+    map<Symbol, vector<Production>> grammar = cfgParser.getRules("context_free_grammar.txt");
 }

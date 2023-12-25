@@ -14,7 +14,7 @@ void DFA::e_closure(State *start)
     returned.insert(start);
     for (auto &transition : start->get_transitions())
     {
-        if (transition.get_input() == EPSILON)
+        if (transition.get_input() == EPSILON_CHAR)
         {
             if (returned.find(transition.get_to()) == returned.end())
             {

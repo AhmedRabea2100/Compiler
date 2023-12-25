@@ -6,7 +6,7 @@ Transition::Transition(State *from, State *to, char input)
 {}
 
 Transition::Transition(State *from, State *to)
-    : from(from), to(to), input(EPSILON)
+    : from(from), to(to), input(EPSILON_CHAR)
 {}
 
  State *Transition::get_from()

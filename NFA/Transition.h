@@ -1,5 +1,5 @@
 #pragma once
-#define EPSILON ' '
+#define EPSILON_CHAR ' '
 
 class State; // Forward declaration
 
