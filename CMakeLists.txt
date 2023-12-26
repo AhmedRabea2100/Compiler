@@ -20,4 +20,6 @@ add_executable(Compiler
         ContextFreeGrammarParser/CFGParser.cpp
         ContextFreeGrammarParser/ParsingTable.cpp
         ContextFreeGrammarParser/ParsingTable.h
+        LL1Parser/ParsingTableBuilder.cpp
+
 )
