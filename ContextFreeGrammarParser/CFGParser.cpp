@@ -26,6 +26,9 @@ std::map<Symbol, std::vector<Production>> CFGParser::getRules(std::string gramma
         rule.clear();
     }
 
+    eliminateLeftRecursion();
+    eliminateLeftFactoring();
+
     std::cout << "=========================================" << std::endl;
     for(auto &x: rules){
         std::cout << x.first.name << " -> ";
@@ -39,29 +42,230 @@ std::map<Symbol, std::vector<Production>> CFGParser::getRules(std::string gramma
     }
     std::cout << std::endl;
 
-    eliminateLeftRecursion();
-//    executeLeftFactoring(&rules);
-
     grammarFile.close();
     return rules;
+}
+
+void CFGParser::eliminateLeftFactoring() {
+    std::map<Symbol,std::vector<Production>> temp;
+
+    // Check for left factoring
+    for (auto it = rules.begin(); it != rules.end(); it++)
+        checkLeftFactoring(temp, it);
+
+    // Replace the old rules with the new ones
+    for(auto &x: temp){
+        auto idx = rules.find(x.first);
+        if(idx != rules.end()){
+            idx->second.clear();
+            idx->second = x.second;
+        }
+        else{
+            if(!x.second.empty())
+                rules[x.first] = x.second;
+        }
+    }
+}
+
+void CFGParser::checkLeftFactoring(std::map<Symbol, std::vector<Production>> &temp, std::map<Symbol, std::vector<Production>>::iterator idx) {
+    std::vector<Production> productions = idx->second;
+    std::map<Symbol, std::vector<Production>> sameStartSymbolProductions;
+
+    for(auto &x: productions){
+        Symbol firstSymbol = x.productionSymbols[0];
+        auto it = sameStartSymbolProductions.find(firstSymbol);
+
+        if(it != sameStartSymbolProductions.end())// Seen before
+            it->second.push_back(x);
+        else{ // Never seen before
+            std::vector<Production> newProduction;
+            newProduction.push_back(x);
+            sameStartSymbolProductions[firstSymbol] = newProduction;
+        }
+    }
+
+    // Found Left Factoring
+    if(sameStartSymbolProductions.size() < productions.size()){
+        idx->second.clear();
+        for (auto it = sameStartSymbolProductions.begin(); it != sameStartSymbolProductions.end(); it++){
+            auto returnLeft = findLongestLeftFactor(temp, idx->first, it->second);
+
+            if (returnLeft != temp.end() && returnLeft->second.size() > 1)
+                checkLeftFactoring(temp, returnLeft);
+        }
+    }
+}
+
+std::map <Symbol, std::vector<Production>>::iterator CFGParser::findLongestLeftFactor(
+        std::map<Symbol, std::vector<Production>> &temp, Symbol lhs, std::vector<Production> productions) {
+    bool notMatched = false;
+    int idx = 1;
+
+    // Find max prefix of all productions
+    while(idx < productions[0].productionSymbols.size()) {
+        Symbol firstSymbol = productions[0].productionSymbols[idx];
+
+        for (int i = 1; i < productions.size(); i++) {
+            if (idx >= productions[i].productionSymbols.size() || productions[i].productionSymbols[idx] != firstSymbol) {
+                notMatched = true;
+                break;
+            }
+        }
+
+        if (notMatched) {
+            idx--;
+            break;
+        }
+        idx++;
+    }
+
+    if(idx == 1 && idx >= productions[0].productionSymbols.size() || idx == productions[0].productionSymbols.size())
+        idx--;
+
+    // The common prefix between the productions
+    Production prefixProduction;
+    for(int i = 0; i <= idx; i++)
+        prefixProduction.productionSymbols.push_back(productions[0].productionSymbols[i]);
+
+    // Create the new rules
+    std::vector<Production> newProductions;
+    int minLength = 1e9;
+    bool hasMore = false;
+
+    for(auto &x: productions){
+        Production newRuleProduction;
+
+        for (int j = idx + 1; j < x.productionSymbols.size(); j++)
+            newRuleProduction.productionSymbols.push_back(x.productionSymbols[j]);
+
+        // Not epsilon
+        if (!newRuleProduction.productionSymbols.empty()) {
+            hasMore = true;
+            newProductions.push_back(newRuleProduction);
+        }
+        minLength = std::min(minLength, (int)x.productionSymbols.size());
+    }
+
+    std::string newRuleName = generateNewRule(temp, lhs.name);
+    Symbol newNonTerminal(newRuleName, NON_TERMINAL);
+
+    if(hasMore){
+        // Add A' to end of A productions
+        prefixProduction.productionSymbols.push_back(newNonTerminal);
+
+        // Add Epsilon to A' productions
+        if(minLength == idx + 1){
+            Production epsilonProduction;
+            epsilonProduction.productionSymbols.push_back(Symbol("\\L", EPSILON));
+            newProductions.push_back(epsilonProduction);
+        }
+    }
+
+    // Check if it doesn't exist before
+    auto tempIdx = temp.find(lhs);
+    if (tempIdx != temp.end())
+        temp.find(lhs)->second.push_back(prefixProduction);
+    else {
+        std::vector<Production> newP;
+        newP.push_back(prefixProduction);
+        temp[lhs] = newP;
+    }
+
+    if (!newProductions.empty()) {
+        return temp.insert(std::pair<Symbol, std::vector<Production>>(newNonTerminal, newProductions)).first;
+    }
+    else {
+        return temp.end();
+    }
+
 }
 
 void CFGParser::eliminateLeftRecursion() {
     std::set<Symbol> nonTerminals;
     std::map<Symbol, std::vector<Production>> temp;
 
-    for(auto &rule: rules){
+    for(auto &rule: rules) {
         Symbol nonTerminal = rule.first;
-        std::vector<Production> curRules = rule.second;
+        std::vector<Production> productions = rule.second;
 
         bool isLeftRecursive = false;
         std::vector<Production> beta;
         std::vector<Production> alpha;
+        for (auto currProduction: productions) {
+            Symbol firstSymbolInProduction = currProduction.productionSymbols[0];
+            auto idx = nonTerminals.find(firstSymbolInProduction);
 
+            if (idx != nonTerminals.end()) { // Non-Immediate Left Recursion
+                std::vector<Production> secondNonTerminalProductions = rules.find(*idx)->second;
+                for (auto &secondNonTerminalProduction: secondNonTerminalProductions) {
+                    Symbol firstSymbolInSecondProduction = secondNonTerminalProduction.productionSymbols[0];
+                    Production concatProduction = secondNonTerminalProduction;
+                    for (int i = 1; i < currProduction.productionSymbols.size(); i++) {
+                        concatProduction.productionSymbols.push_back(currProduction.productionSymbols[i]);
+                    }
+                    isLeftRecursive |= checkLeftRecursion(nonTerminal, firstSymbolInSecondProduction, concatProduction,
+                                                          alpha, beta);
+                }
+            }
+            else { // Immediate Left Recursion
+                isLeftRecursive |= checkLeftRecursion(nonTerminal, firstSymbolInProduction, currProduction, alpha,beta);
+            }
+        }
 
+        if(isLeftRecursive){
+            std::string newRuleName = generateNewRule(temp, nonTerminal.name);
+            Symbol newRule(newRuleName, NON_TERMINAL);
 
+            // Create the new splitted rules
+            for(auto &x: beta)
+                x.productionSymbols.push_back(newRule);
+            for(auto &x: alpha)
+                x.productionSymbols.push_back(newRule);
+
+            // Epsilion production for rule'
+            Production epsilonProduction;
+            epsilonProduction.productionSymbols.push_back(Symbol("\\L", EPSILON));
+            alpha.push_back(epsilonProduction);
+
+            // Add the new productions to original rule
+            rule.second.clear();
+            for(auto &x: beta)
+                rule.second.push_back(x);
+
+            temp[newRule] = alpha;
+        }
+        nonTerminals.insert(nonTerminal);
     }
 
+    for(auto &x: temp)
+        rules[x.first] = x.second;
+}
+
+bool CFGParser::checkLeftRecursion(Symbol lhs, Symbol rhs, Production p, std::vector<Production> &alpha, std::vector<Production> &beta){
+    if (lhs == rhs) {
+        Production pr;
+        for (int i = 1; i < p.productionSymbols.size(); i++)
+            pr.productionSymbols.push_back(p.productionSymbols[i]);
+        alpha.push_back(pr);
+        return true;
+    }
+    else {
+        beta.push_back(p);
+        return false;
+    }
+}
+
+std::string CFGParser::generateNewRule(std::map<Symbol, std::vector<Production>> &temp, std::string lhs) {
+    int add = 0;
+    Symbol newLHS(lhs, NON_TERMINAL);
+    std::string newNonTerminalName;
+    do {
+        newNonTerminalName = lhs;
+        newNonTerminalName.append(std::to_string(add));
+        newLHS.name = newNonTerminalName;
+        add++;
+    } while (rules.find(newLHS) != rules.end() || temp.find(newLHS) != temp.end());
+    return newNonTerminalName;
 }
 
 void  CFGParser::resolveRule(std::string rule){
@@ -116,6 +320,12 @@ std::vector<Production> CFGParser::rhsToProductions(std::string rhs) {
             }
             Production p;
             productions.push_back(p);
+        }
+        else if (currentChar == 'L' && i > 0 && rhs.at(i - 1) == '\\' && (i < 2 || rhs.at(i - 2) != '\\')) {
+            currentProductionSymbol.append(1, currentChar);
+            Symbol newTerminal(currentProductionSymbol, EPSILON);
+            productions.back().productionSymbols.push_back(newTerminal);
+            currentProductionSymbol.clear();
         }
         else{
             currentProductionSymbol += currentChar;
