@@ -156,7 +156,7 @@ std::map <Symbol, std::vector<Production>>::iterator CFGParser::findLongestLeftF
         // Add Epsilon to A' productions
         if(minLength == idx + 1){
             Production epsilonProduction;
-            epsilonProduction.productionSymbols.push_back(Symbol("\\L", EPSILON));
+            epsilonProduction.productionSymbols.push_back(Symbol(EPSILON_SYMBOL, EPSILON));
             newProductions.push_back(epsilonProduction);
         }
     }
@@ -224,7 +224,7 @@ void CFGParser::eliminateLeftRecursion() {
 
             // Epsilion production for rule'
             Production epsilonProduction;
-            epsilonProduction.productionSymbols.push_back(Symbol("\\L", EPSILON));
+            epsilonProduction.productionSymbols.push_back(Symbol(EPSILON_SYMBOL, EPSILON));
             alpha.push_back(epsilonProduction);
 
             // Add the new productions to original rule

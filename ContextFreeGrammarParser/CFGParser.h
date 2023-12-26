@@ -1,5 +1,7 @@
 #ifndef COMPILER_CFGPARSER_H
 #define COMPILER_CFGPARSER_H
+#define EPSILON_SYMBOL "\\L"
+
 #include <iostream>
 #include <string>
 #include <map>
