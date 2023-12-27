@@ -85,3 +85,76 @@ void OutputWritter::drawLine(int length)
         file << "-";
     file << "\n";
 }
+
+void OutputWritter::writeParserResult(ParseResult& parserResult) {
+    if (parserResult.msg.empty()) {
+        file << parserResult.rule.first.toString() << " ----> " << parserResult.rule.second.stringify() << std::endl;
+    } else {
+        file << parserResult.msg << std::endl;
+    }
+}
+
+void OutputWritter::writeParsingTable(ParsingTable *parsingTable) {
+    std::map<Symbol, std::map<Symbol, Production>> table = parsingTable->getParsingTable();
+    file << "PREDICTIVE PARSING TABLE :" << std::endl;
+    drawLine(table.size() * 50);
+    //first print terminals
+    std::set<Symbol> terminals;
+    for (auto &outer_map_pair : table)
+        for (auto &inner_map_pair : outer_map_pair.second)
+            terminals.insert(inner_map_pair.first);
+    fillSpaces(45);
+    for (auto terminal : terminals) {
+        if (terminal.name == "`")
+            file << "$";
+        else
+            file << terminal.name;
+        fillSpaces(50 - terminal.name.length());
+    }
+    file << std::endl;
+    drawLine(table.size() * 50);
+
+    //second print non terminals
+    //third loop to print cells
+    for (auto &outer_map_pair : table) {
+        file << outer_map_pair.first.name;
+        fillSpaces(20 - outer_map_pair.first.name.length());
+        file << "|";
+        for (auto terminal : terminals) {
+            if (!parsingTable->isEmpty(outer_map_pair.first, terminal)) {
+                std::string production = table[outer_map_pair.first][terminal].stringify();
+                file << production;
+                fillSpaces(50 - production.length());
+                file << "|";
+            } else {
+                fillSpaces(50);
+                file << "|";
+            }
+        }
+        file << std::endl;
+    }
+
+    drawLine(table.size() * 50);
+    file << std::endl;
+}
+
+void OutputWritter::writeLeftDerivation(std::list<Symbol> *derivationLeftSide,
+                                     std::list<Symbol> *stack,
+                                     std::string errorMsg) {
+    for (auto symbol: *derivationLeftSide) {
+        file << symbol.toString() << " ";
+    }
+
+    auto endIterator = stack->end(), newLine = stack->end();
+    endIterator--, newLine--, newLine--;
+
+    for (auto it = stack->begin(); it != endIterator; it++) {
+        file << (*it).toString() << (it == newLine ? "" : " ");
+    }
+
+    if (!errorMsg.empty()) {
+        file << " ---> " << errorMsg;
+    }
+
+    file << std::endl;
+}

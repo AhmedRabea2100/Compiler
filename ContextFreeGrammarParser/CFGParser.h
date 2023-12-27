@@ -27,6 +27,10 @@ struct Symbol {
         type = symbolType;
     }
 
+    std::string toString() {
+        return name;
+    }
+
     bool operator<(const Symbol &x) const {
         return name < x.name;
     }
