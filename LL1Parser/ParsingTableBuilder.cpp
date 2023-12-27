@@ -99,7 +99,7 @@ map<Symbol, set<Symbol>> ParsingTableBuilder::getFirst(map<Symbol, vector<Produc
             }
         }
     }
-    
+
     return firstMap;
 }
 
@@ -198,6 +198,14 @@ map<Symbol, ParsingTableBuilder::dependencies> ParsingTableBuilder::getDependenc
 
                     // increment the number of dependencies of the current non-terminal symbol
                     dependenciesMap[rule.first].dependenciesCount++;
+
+                    // continue the loop if the current symbol has epsilon production
+                    for (auto &prod : grammar[symbol])
+                    {
+                        if (production.productionSymbols.size() == 1 && production.productionSymbols[0].type == EPSILON)
+                            continue;
+                    }
+                    break;
                 }
             }
         }
