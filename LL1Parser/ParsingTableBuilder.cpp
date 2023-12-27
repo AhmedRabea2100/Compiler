@@ -2,6 +2,9 @@
 #include <queue>
 #include <algorithm>
 
+ParsingTableBuilder::ParsingTableBuilder()
+{}
+
 ParsingTable ParsingTableBuilder::buildParsingTable(map<Symbol, vector<Production>> grammar)
 {
     // get first set of all non-terminal symbols
@@ -212,17 +215,15 @@ void ParsingTableBuilder::constructParsingTable(std::map<Symbol, std::vector<Pro
             if(hasEpsilon(first[symbols[0]])){
                 // add each symbol in the Follow set
                 for(auto &terminal : follow[rule.first]){
-                    std::pair<Symbol, Symbol> tableEntry(rule.first, terminal);
                     if(parsingTable.isEmpty(rule.first, terminal)){
                         std::cout << "Grammar is not LL(1)" << std::endl;
                         exit(0);
                     }
                     parsingTable.addProduction(rule.first, terminal, production);
                 }
-            }else{
+            } else {
                 // add each symbol in the First set
                 for(auto &terminal : first[symbols[0]]){
-                    std::pair<Symbol, Symbol> tableEntry(rule.first, terminal);
                     if(parsingTable.isEmpty(rule.first, terminal)){
                         std::cout << "Grammar is not LL(1)" << std::endl;
                         exit(0);
@@ -230,7 +231,6 @@ void ParsingTableBuilder::constructParsingTable(std::map<Symbol, std::vector<Pro
                     parsingTable.addProduction(rule.first, terminal, production);
                 }
             }
-
         }
     }
     addSync(follow);

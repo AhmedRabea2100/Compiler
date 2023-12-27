@@ -18,8 +18,6 @@ add_executable(Compiler
         OutputWritter/OutputWritter.cpp
         LexicalCodeParser/Tokenizer.cpp
         ContextFreeGrammarParser/CFGParser.cpp
-        ContextFreeGrammarParser/ParsingTable.cpp
-        ContextFreeGrammarParser/ParsingTable.h
+        LL1Parser/ParsingTable.cpp
         LL1Parser/ParsingTableBuilder.cpp
-
 )

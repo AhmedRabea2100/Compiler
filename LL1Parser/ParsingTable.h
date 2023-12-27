@@ -7,7 +7,6 @@
 
 class ParsingTable {
     public:
-        std::map<std::pair<Symbol, Symbol>, Production> parsingTable;
         Symbol getStartSymbol();
         Production getProduction(Symbol nonTerminal, Symbol terminal);
         bool isEmpty(Symbol nonTerminal, Symbol terminal);
@@ -15,6 +14,7 @@ class ParsingTable {
         void addProduction(Symbol nonTerminal, Symbol terminal, Production production);
 
     private:
+        std::map<std::pair<Symbol, Symbol>, Production> parsingTable;
         Symbol start;
         void setStartSymbol(Symbol start);
 };

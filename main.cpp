@@ -9,6 +9,7 @@
 #include "./OutputWritter/OutputWritter.h"
 #include "./LexicalCodeParser/Tokenizer.h"
 #include "./ContextFreeGrammarParser/CFGParser.h"
+#include "./LL1Parser/ParsingTableBuilder.h"
 
 
 int main(){
@@ -52,4 +53,9 @@ int main(){
     // Parse Context Free Grammar
     CFGParser cfgParser;
     map<Symbol, vector<Production>> grammar = cfgParser.getRules("context_free_grammar.txt");
+
+    // Build Parsing Table
+    ParsingTableBuilder parsingTableBuilder;
+    ParsingTable parsingTable = parsingTableBuilder.buildParsingTable(grammar);
+
 }
