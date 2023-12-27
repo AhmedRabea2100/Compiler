@@ -24,10 +24,19 @@ map<Symbol, set<Symbol>> ParsingTableBuilder::getFirst(map<Symbol, vector<Produc
     map<Symbol, set<Symbol>> firstMap;
     map<Symbol, dependencies> dependenciesMap = getDependencies(grammar);
 
-    // initialize first of all non-terminal symbols to empty set
+    // initialize first set of all terminal symbols to the symbol itself
     for (auto &rule : grammar)
     {
-        firstMap[rule.first] = set<Symbol>();
+        for (auto &production : rule.second)
+        {
+            for (auto &symbol : production.productionSymbols)
+            {
+                if (symbol.type == TERMINAL || symbol.type == EPSILON)
+                {
+                    firstMap[symbol].insert(symbol);
+                }
+            }
+        }
     }
 
     // initialize non-terminal queue with all non-terminal symbols that have no dependencies
@@ -106,12 +115,6 @@ map<Symbol, set<Symbol>> ParsingTableBuilder::getFirst(map<Symbol, vector<Produc
 map<Symbol, set<Symbol>> ParsingTableBuilder::getFollow(map<Symbol, vector<Production>> grammar, map<Symbol, set<Symbol>> firstSet)
 {
     map<Symbol, set<Symbol>> followMap;
-
-    // initialize follow of all non-terminal symbols to empty set
-    for (auto &rule : grammar)
-    {
-        followMap[rule.first] = set<Symbol>();
-    }
 
     bool update = true;
     size_t prevSize = 0;
