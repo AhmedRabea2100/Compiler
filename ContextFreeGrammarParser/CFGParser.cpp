@@ -273,10 +273,13 @@ void  CFGParser::resolveRule(std::string rule){
     std::vector<std::string> ruleParts = split(rule, PRODUCTION_DETECTOR);
     std::string lhs = trim(ruleParts[0], " \t");
     std::string rhs = trim(ruleParts[1], " \t");
-    if(rules.empty())
-        startSymbol.name = lhs;
     std::vector<Production> productions = rhsToProductions(rhs);
-    rules[Symbol(lhs, NON_TERMINAL)] = productions;
+    if(rules.empty()) {
+        startSymbol.name = lhs;
+        rules[startSymbol] = productions;
+    }
+    else
+        rules[Symbol(lhs, NON_TERMINAL)] = productions;
 }
 
 std::vector<Production> CFGParser::rhsToProductions(std::string rhs) {

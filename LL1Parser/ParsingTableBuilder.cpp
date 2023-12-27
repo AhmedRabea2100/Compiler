@@ -113,48 +113,79 @@ map<Symbol, set<Symbol>> ParsingTableBuilder::getFollow(map<Symbol, vector<Produ
         followMap[rule.first] = set<Symbol>();
     }
 
-    for (auto &rule : grammar)
+    bool update = true;
+    size_t prevSize = 0;
+    while (update)
     {
-        // if the current non-terminal symbol is the start symbol
-        if (rule.first.type == START)
+        update = false;
+        for (auto &rule : grammar)
         {
-            // add $ to the follow set of the start symbol
-            followMap[rule.first].insert(Symbol("$", TERMINAL));
-        }
-        for (auto &production : rule.second)
-        {
-            for (int i = 0; i < production.productionSymbols.size(); i++)
+            // if the current non-terminal symbol is the start symbol
+            if (rule.first.type == START)
             {
-                // if the current symbol is a non-terminal symbol
-                if (production.productionSymbols[i].type == NON_TERMINAL || production.productionSymbols[i].type == START)
+                // add $ to the follow set of the start symbol
+                prevSize = followMap[rule.first].size();
+                followMap[rule.first].insert(Symbol("$", TERMINAL));
+                if (followMap[rule.first].size() > prevSize)
+                    update = true;
+            }
+            for (auto &production : rule.second)
+            {
+                for (int i = 0; i < production.productionSymbols.size(); i++)
                 {
-                    for (int j = i + 1; j < production.productionSymbols.size(); j++)
+                    // if the current symbol is a non-terminal symbol
+                    if (production.productionSymbols[i].type == NON_TERMINAL || production.productionSymbols[i].type == START)
                     {
-                        if (production.productionSymbols[j].type == TERMINAL)
+                        for (int j = i + 1; j < production.productionSymbols.size(); j++)
                         {
-                            // add the terminal symbol to the follow set of the current non-terminal symbol
-                            followMap[production.productionSymbols[i]].insert(production.productionSymbols[j]);
-                            break;
-                        }
-                        // if the next symbol is a non-terminal symbol
-                        else if (production.productionSymbols[j].type == NON_TERMINAL || production.productionSymbols[j].type == START)
-                        {
-                            // add the first set of the next symbol to the follow set of the current non-terminal symbol
-                            followMap[production.productionSymbols[i]].insert(firstSet[production.productionSymbols[j]].begin(), firstSet[production.productionSymbols[j]].end());
-
-                            // break the loop if the next symbol doesn't have epsilon in its first set
-                            if (firstSet[production.productionSymbols[j]].find(Symbol(EPSILON_SYMBOL, EPSILON)) == firstSet[production.productionSymbols[j]].end())
+                            if (production.productionSymbols[j].type == TERMINAL)
                             {
+                                // add the terminal symbol to the follow set of the current non-terminal symbol
+                                prevSize = followMap[production.productionSymbols[i]].size();
+                                followMap[production.productionSymbols[i]].insert(production.productionSymbols[j]);
+                                if (followMap[production.productionSymbols[i]].size() > prevSize)
+                                    update = true;
                                 break;
                             }
-
-                            // if the next symbol is the last symbol in the production
-                            if (j == production.productionSymbols.size() - 1)
+                            // if the next symbol is a non-terminal symbol
+                            else if (production.productionSymbols[j].type == NON_TERMINAL || production.productionSymbols[j].type == START)
                             {
-                                // add the follow set of the current non-terminal symbol to the follow set of the next symbol
-                                followMap[production.productionSymbols[i]].insert(followMap[rule.first].begin(), followMap[rule.first].end());
+                                // add the first set of the next symbol to the follow set of the current non-terminal symbol
+                                prevSize = followMap[production.productionSymbols[i]].size();
+                                followMap[production.productionSymbols[i]].insert(firstSet[production.productionSymbols[j]].begin(), firstSet[production.productionSymbols[j]].end());
+                                if (followMap[production.productionSymbols[i]].size() > prevSize)
+                                    update = true;
+
+                                // break the loop if the next symbol doesn't have epsilon in its first set
+                                if (firstSet[production.productionSymbols[j]].find(Symbol(EPSILON_SYMBOL, EPSILON)) == firstSet[production.productionSymbols[j]].end())
+                                {
+                                    break;
+                                }
                             }
                         }
+                    }
+                }
+                
+                for (int i = production.productionSymbols.size() - 1; i >= 0; i--)
+                {
+                    // if the current symbol is a non-terminal symbol
+                    if (production.productionSymbols[i].type == NON_TERMINAL || production.productionSymbols[i].type == START)
+                    {
+                        // add the follow set of the current non-terminal symbol to the follow set of the symbol
+                        prevSize = followMap[production.productionSymbols[i]].size();
+                        followMap[production.productionSymbols[i]].insert(followMap[rule.first].begin(), followMap[rule.first].end());
+                        if (followMap[production.productionSymbols[i]].size() > prevSize)
+                            update = true;
+
+                        // break the loop if the current non-terminal symbol doesn't have epsilon in its first set
+                        if (firstSet[production.productionSymbols[i]].find(Symbol(EPSILON_SYMBOL, EPSILON)) == firstSet[production.productionSymbols[i]].end())
+                        {
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        break;
                     }
                 }
             }
