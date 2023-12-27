@@ -99,6 +99,8 @@ map<Symbol, set<Symbol>> ParsingTableBuilder::getFirst(map<Symbol, vector<Produc
             }
         }
     }
+    
+    return firstMap;
 }
 
 map<Symbol, set<Symbol>> ParsingTableBuilder::getFollow(map<Symbol, vector<Production>> grammar, map<Symbol, set<Symbol>> firstSet)
@@ -208,23 +210,32 @@ void ParsingTableBuilder::constructParsingTable(std::map<Symbol, std::vector<Pro
                                                 std::map<Symbol, std::set<Symbol>> first,
                                                 std::map<Symbol, std::set<Symbol>> follow)
 {
-    for (auto &rule : rules) {
+    for (auto &rule : rules)
+    {
         std::vector<Production> productions = rule.second;
-        for(auto &production : productions) {
+        for (auto &production : productions)
+        {
             std::vector<Symbol> symbols = production.productionSymbols;
-            if(hasEpsilon(first[symbols[0]])){
+            if (hasEpsilon(first[symbols[0]]))
+            {
                 // add each symbol in the Follow set
-                for(auto &terminal : follow[rule.first]){
-                    if(parsingTable.isEmpty(rule.first, terminal)){
+                for (auto &terminal : follow[rule.first])
+                {
+                    if (parsingTable.isEmpty(rule.first, terminal))
+                    {
                         std::cout << "Grammar is not LL(1)" << std::endl;
                         exit(0);
                     }
                     parsingTable.addProduction(rule.first, terminal, production);
                 }
-            } else {
+            }
+            else
+            {
                 // add each symbol in the First set
-                for(auto &terminal : first[symbols[0]]){
-                    if(parsingTable.isEmpty(rule.first, terminal)){
+                for (auto &terminal : first[symbols[0]])
+                {
+                    if (parsingTable.isEmpty(rule.first, terminal))
+                    {
                         std::cout << "Grammar is not LL(1)" << std::endl;
                         exit(0);
                     }
@@ -236,11 +247,16 @@ void ParsingTableBuilder::constructParsingTable(std::map<Symbol, std::vector<Pro
     addSync(follow);
 }
 
-void ParsingTableBuilder::addSync(std::map<Symbol, std::set<Symbol>> follow) {
-    for (auto &nonTerminal : follow) {
-        for (auto &terminal : nonTerminal.second) {
-            if (parsingTable.isEmpty(nonTerminal.first, terminal)) {
-                if (parsingTable.getProduction(nonTerminal.first, terminal).productionSymbols[0].type != EPSILON) {
+void ParsingTableBuilder::addSync(std::map<Symbol, std::set<Symbol>> follow)
+{
+    for (auto &nonTerminal : follow)
+    {
+        for (auto &terminal : nonTerminal.second)
+        {
+            if (parsingTable.isEmpty(nonTerminal.first, terminal))
+            {
+                if (parsingTable.getProduction(nonTerminal.first, terminal).productionSymbols[0].type != EPSILON)
+                {
                     std::cout << "Grammar is not LL(1)" << std::endl;
                     exit(0);
                 }
@@ -251,6 +267,7 @@ void ParsingTableBuilder::addSync(std::map<Symbol, std::set<Symbol>> follow) {
     }
 }
 
-bool ParsingTableBuilder::hasEpsilon(std::set<Symbol> symbols) {
-    return std::find(symbols.begin(), symbols.end(), Symbol("EPSILON", EPSILON)) != symbols.end();
+bool ParsingTableBuilder::hasEpsilon(std::set<Symbol> symbols)
+{
+    return std::find(symbols.begin(), symbols.end(), Symbol(EPSILON_SYMBOL, EPSILON)) != symbols.end();
 }
