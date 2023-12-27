@@ -247,64 +247,45 @@ map<Symbol, ParsingTableBuilder::dependencies> ParsingTableBuilder::getDependenc
 
     return dependenciesMap;
 }
-
-void ParsingTableBuilder::constructParsingTable(std::map<Symbol, std::vector<Production>> rules,
-                                                std::map<Symbol, std::set<Symbol>> first,
-                                                std::map<Symbol, std::set<Symbol>> follow)
-{
-    for (auto &rule : rules)
-    {
-        std::vector<Production> productions = rule.second;
-        for (auto &production : productions)
-        {
-            std::vector<Symbol> symbols = production.productionSymbols;
-            if (hasEpsilon(first[symbols[0]]))
-            {
-                // add each symbol in the Follow set
-                for (auto &terminal : follow[rule.first])
-                {
-                    if (parsingTable.isEmpty(rule.first, terminal))
-                    {
-                        std::cout << "Grammar is not LL(1)" << std::endl;
+void ParsingTableBuilder::constructParsingTable(std::map<Symbol, std::vector<Production>> rules, std::map<Symbol, std::set<Symbol>> first, std::map<Symbol, std::set<Symbol>> follow) {
+    for (auto it = rules.begin(); it != rules.end(); it++) {
+        std::vector<Production> productions = rules[it->first];
+        for (auto prod : productions) {
+            std::vector<Symbol> symbols = prod.productionSymbols;
+            if (hasEpsilon(first[symbols[0]])) {
+                for (auto terminal : follow[it->first]) {
+                    if (!parsingTable.isEmpty(it->first, terminal)) {
+                        std::cout << "ErrorHandler::errors[ErrorHandler::notLL1Error]";
                         exit(0);
                     }
-                    parsingTable.addProduction(rule.first, terminal, production);
+                    parsingTable.addProduction(it->first, terminal, prod);
                 }
-            }
-            else
-            {
-                // add each symbol in the First set
-                for (auto &terminal : first[symbols[0]])
-                {
-                    if (parsingTable.isEmpty(rule.first, terminal))
-                    {
-                        std::cout << "Grammar is not LL(1)" << std::endl;
+            } else {
+                for (auto terminal : first[symbols[0]]) {
+                    if (!parsingTable.isEmpty(it->first, terminal)) {
+                        std::cout << "ErrorHandler::errors[ErrorHandler::notLL1Error]";
                         exit(0);
                     }
-                    parsingTable.addProduction(rule.first, terminal, production);
+                    parsingTable.addProduction(it->first, terminal, prod);
                 }
             }
         }
     }
-    addSync(follow);
+    addSyncEntries(follow);
 }
 
-void ParsingTableBuilder::addSync(std::map<Symbol, std::set<Symbol>> follow)
-{
-    for (auto &nonTerminal : follow)
-    {
-        for (auto &terminal : nonTerminal.second)
-        {
-            if (parsingTable.isEmpty(nonTerminal.first, terminal))
-            {
-                if (parsingTable.getProduction(nonTerminal.first, terminal).productionSymbols[0].type != EPSILON)
-                {
-                    std::cout << "Grammar is not LL(1)" << std::endl;
-                    exit(0);
-                }
+void ParsingTableBuilder::addSyncEntries(std::map<Symbol, std::set<Symbol>> follow) {
+    Production sync;
+    sync.productionSymbols.push_back(Symbol("SYNC", TERMINAL));
+    for (auto f : follow) {
+        for (auto s : f.second) {
+            if (parsingTable.isEmpty(f.first, s))
+                parsingTable.addProduction(f.first, s, sync);
+            else if (parsingTable.getProduction(f.first,s).productionSymbols[0].type == EPSILON)
                 continue;
-            }
-            parsingTable.getProduction(nonTerminal.first, terminal).productionSymbols.push_back(Symbol("sync", TERMINAL));
+            else
+                parsingTable.addProduction(f.first, s, sync);
+
         }
     }
 }

@@ -28,6 +28,6 @@ private:
     map<Symbol, set<Symbol>> getFollow(map<Symbol, vector<Production>> grammar, map<Symbol, set<Symbol>> firstSet);
     map<Symbol, dependencies> getDependencies(map<Symbol, vector<Production>> grammar);
     void constructParsingTable(std::map<Symbol, std::vector<Production>> rules, std::map<Symbol, std::set<Symbol>> first, std::map<Symbol, std::set<Symbol>> follow);    
-    void addSync(std::map<Symbol, std::set<Symbol>> follow);
+    void addSyncEntries(std::map<Symbol, std::set<Symbol>> follow);
     bool hasEpsilon(std::set<Symbol> symbols);
 };

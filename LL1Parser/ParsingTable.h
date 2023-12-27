@@ -12,9 +12,11 @@ class ParsingTable {
         bool isEmpty(Symbol nonTerminal, Symbol terminal);
         bool isSync(Symbol nonTerminal, Symbol terminal);
         void addProduction(Symbol nonTerminal, Symbol terminal, Production production);
-
+    std::map<Symbol, std::map<Symbol, Production>> getParsingTable() {
+        return parsingTable;
+        }
     private:
-        std::map<std::pair<Symbol, Symbol>, Production> parsingTable;
+    std::map<Symbol, std::map<Symbol, Production>> parsingTable;
         Symbol start;
         void setStartSymbol(Symbol start);
 };

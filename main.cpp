@@ -11,6 +11,67 @@
 #include "./ContextFreeGrammarParser/CFGParser.h"
 #include "./LL1Parser/ParsingTableBuilder.h"
 
+std::ofstream file;
+std::string fileName = "yousry222.txt";
+
+void fillSpaces(int spaceNum) {
+    for (int i = 0; i < spaceNum; i++)
+        file << " ";
+}
+
+void drawLine(int length) {
+    for (int i = 0; i < length; i++)
+        file << "-";
+    file << "\n";
+}
+
+void writeParsingTable(ParsingTable parsingTable) {
+    std::map<Symbol, std::map<Symbol, Production>> table;
+    table = parsingTable.getParsingTable();
+    file.open(fileName);
+    file << "PREDICTIVE PARSING TABLE :" << std::endl;
+    drawLine(table.size() * 50);
+    //first print terminals
+    std::set<Symbol> terminals;
+    for (auto &outer_map_pair : table)
+        for (auto &inner_map_pair : outer_map_pair.second)
+            terminals.insert(inner_map_pair.first);
+    fillSpaces(45);
+    for (auto terminal : terminals) {
+        if (terminal.name == "`")
+            file << "$";
+        else
+            file << terminal.name;
+        fillSpaces(50 - terminal.name.length());
+    }
+    file << std::endl;
+    drawLine(table.size() * 50);
+
+
+    for (auto &outer_map_pair : table) {
+        file << outer_map_pair.first.name;
+        fillSpaces(20 - outer_map_pair.first.name.length());
+        file << "|";
+        for (auto terminal : terminals) {
+            if (!parsingTable.isEmpty(outer_map_pair.first, terminal)) {
+                std::string production = table[outer_map_pair.first][terminal].stringify();
+                file << production;
+                fillSpaces(50 - production.length());
+                file << "|";
+            } else {
+                fillSpaces(50);
+                file << "|";
+            }
+        }
+        file << std::endl;
+    }
+
+    drawLine(table.size() * 50);
+    file << std::endl;
+    file.close();
+}
+
+
 
 int main(){
     // Read and parse grammar file
@@ -57,5 +118,8 @@ int main(){
     // Build Parsing Table
     ParsingTableBuilder parsingTableBuilder;
     ParsingTable parsingTable = parsingTableBuilder.buildParsingTable(grammar);
+
+    cout << "Finished building parsing table" << endl;
+    writeParsingTable(parsingTable);
 
 }
