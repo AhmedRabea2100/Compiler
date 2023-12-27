@@ -5,9 +5,10 @@
 #include <fstream>
 #include <iostream>
 #include "../DFA/Dstate.h"
-
+#include <list>
 #include "../LL1Parser/ParsingTable.h"
-#include "../Parser/parser.h"
+#include "../Parser/Result.h"
+//#include "../Parser/parser.h"
 
 using namespace std;
 

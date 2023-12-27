@@ -7,18 +7,10 @@
 #include "../LL1Parser/ParsingTable.h"
 #include "../LexicalCodeParser/Tokenizer.h"
 #include "../OutputWritter/OutputWritter.h"
-
+#include "Result.h"
 #define END "$"
 
-struct ParseResult {
-    std::string msg;
-    std::pair<Symbol, Production> rule;
-    bool tokenDone;
 
-    ParseResult() {
-        msg = "";
-    }
-};
 
 
 class Parser {
