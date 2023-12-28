@@ -54,6 +54,9 @@ int main(){
     ParsingTableBuilder parsingTableBuilder;
     ParsingTable parsingTable = parsingTableBuilder.buildParsingTable(grammar);
     cout << "Finished building parsing table" << endl;
+    auto *table = new OutputWritter("parsing_table.txt");
+    table->writeParsingTable(&parsingTable);
+    table->closeFile();
 
     // Parse code and Left Derivation
     auto *parserWritter = new OutputWritter("parser_output.txt");

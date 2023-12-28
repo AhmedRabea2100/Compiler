@@ -69,22 +69,24 @@ void OutputWritter::writeParserResult(ParseResult& parserResult) {
 
 void OutputWritter::writeParsingTable(ParsingTable* parsingTable) {
     std::map<Symbol, std::map<Symbol, Production>> table = parsingTable->getParsingTable();
-    file << "PREDICTIVE PARSING TABLE :" << std::endl;
     drawLine(table.size() * 50);
-    //first print terminals
+
+    // first print terminals
     std::set<Symbol> terminals;
     for (auto &outer_map_pair : table)
         for (auto &inner_map_pair : outer_map_pair.second)
             terminals.insert(inner_map_pair.first);
     fillSpaces(45);
-    //print terminals
+
+    // print terminals
     for (auto terminal : terminals) {
         file << terminal.name;
         fillSpaces(50 - terminal.name.length());
     }
     file << std::endl;
     drawLine(table.size() * 50);
-    //print non-terminals and productions
+
+    // print non-terminals and productions
     for (auto &outer_map_pair : table) {
         file << outer_map_pair.first.name;
         fillSpaces(20 - outer_map_pair.first.name.length());
@@ -104,7 +106,6 @@ void OutputWritter::writeParsingTable(ParsingTable* parsingTable) {
     }
 
     drawLine(table.size() * 50);
-    file << std::endl;
 }
 
 void OutputWritter::writeLeftDerivation(std::list<Symbol> *derivationLeftSide,

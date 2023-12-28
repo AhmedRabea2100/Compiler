@@ -6,7 +6,6 @@ void Parser::parse(ParsingTable *parsingTable,
                    OutputWritter *leftDerivationWriter) {
 
     initialize(parsingTable);
-    parserWriter->writeParsingTable(parsingTable);
 
     TokenWithLexeme token;
 
