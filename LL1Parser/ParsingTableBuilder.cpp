@@ -248,7 +248,6 @@ map<Symbol, ParsingTableBuilder::dependencies> ParsingTableBuilder::getDependenc
     return dependenciesMap;
 }
 
-
 void ParsingTableBuilder::constructParsingTable(std::map<Symbol, std::vector<Production>> rules, std::map<Symbol, std::set<Symbol>> first, std::map<Symbol, std::set<Symbol>> follow) {
     for (auto it = rules.begin(); it != rules.end(); it++) {
         // if the current non-terminal symbol is the start symbol

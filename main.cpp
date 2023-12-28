@@ -16,7 +16,7 @@
 int main(){
     // Read and parse grammar file
     GrammarParser grammarParser;
-    std::vector<Token *> tokens = grammarParser.getTokens(R"(lexical_grammar.txt)");
+    std::vector<Token *> tokens = grammarParser.getTokens("lexical_grammar.txt");
 
     // Build NFA
     NFABuilder builder;
@@ -54,15 +54,18 @@ int main(){
     ParsingTableBuilder parsingTableBuilder;
     ParsingTable parsingTable = parsingTableBuilder.buildParsingTable(grammar);
     cout << "Finished building parsing table" << endl;
+    
+    // Write Parsing Table
     auto *table = new OutputWritter("parsing_table.txt");
     table->writeParsingTable(&parsingTable);
     table->closeFile();
+    cout << "Finished writing parsing table" << endl;
 
     // Parse code and Left Derivation
     auto *parserWritter = new OutputWritter("parser_output.txt");
     auto *leftDerivationWritter = new OutputWritter("left_derivation.txt");
     Parser::getInstance().parse(&parsingTable, tokenizer, parserWritter, leftDerivationWritter);
-    std::cout << "Finished Matching & Parsing\n";
+    std::cout << "Finished Matching & Parsing" << endl;
 
     lexicalAnalyzerWritter->closeFile();
     parserWritter->closeFile();
