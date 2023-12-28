@@ -27,5 +27,9 @@ void ParsingTable::addProduction(Symbol nonTerminal, Symbol terminal, Production
     parsingTable[nonTerminal].insert(std::make_pair(terminal, production));
 }
 
+std::map<Symbol, std::map<Symbol, Production>> ParsingTable::getParsingTable() {
+    return parsingTable;
+}
 
-\
+
+
