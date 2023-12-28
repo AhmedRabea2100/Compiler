@@ -128,7 +128,7 @@ map<Symbol, set<Symbol>> ParsingTableBuilder::getFollow(map<Symbol, vector<Produ
             {
                 // add $ to the follow set of the start symbol
                 prevSize = followMap[rule.first].size();
-                followMap[rule.first].insert(Symbol("$", TERMINAL));
+                followMap[rule.first].insert(Symbol(END_SYMBOL, TERMINAL));
                 if (followMap[rule.first].size() > prevSize)
                     update = true;
             }

@@ -21,4 +21,4 @@ add_executable(Compiler
         LL1Parser/ParsingTable.cpp
         LL1Parser/ParsingTableBuilder.cpp
         Parser/parser.cpp
-        Parser/Result.h)
+        )

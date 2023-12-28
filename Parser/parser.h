@@ -8,9 +8,6 @@
 #include "../LexicalCodeParser/Tokenizer.h"
 #include "../OutputWritter/OutputWritter.h"
 #include "Result.h"
-#define END "$"
-
-
 
 
 class Parser {
@@ -30,7 +27,7 @@ private:
     enum ERROR {
         UNMATCHED_TERMINALS, EMPTY_CELL, SYNC_CELL
     };
-    const TokenWithLexeme END_LEXEME = TokenWithLexeme(END, END);
+    const TokenWithLexeme END_LEXEME = TokenWithLexeme(END_SYMBOL, END_SYMBOL);
 
     std::list<Symbol> *stack;
     ParsingTable *parseTable;
@@ -39,8 +36,6 @@ private:
     Parser() {};
 
     Parser(Parser const &);
-
-    void operator=(Parser const &);
 
     void initialize(ParsingTable *parseTable);
 

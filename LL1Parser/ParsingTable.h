@@ -3,6 +3,7 @@
 
 #include "../ContextFreeGrammarParser/CFGParser.h"
 #include <iostream>
+#define END_SYMBOL "$"
 
 
 class ParsingTable {

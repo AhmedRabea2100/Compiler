@@ -77,7 +77,6 @@ ParseResult Parser::parse(TokenWithLexeme token) {
     return result;
 }
 
-
 void Parser::initialize(ParsingTable *table) {
     parseTable = table;
     if (stack != nullptr) {
@@ -86,7 +85,7 @@ void Parser::initialize(ParsingTable *table) {
     }
     stack = new std::list<Symbol>();
     derivativeLeftSide = new std::list<Symbol>();
-    stack->push_front(Symbol(END, SymbolType::START));
+    stack->push_front(Symbol(END_SYMBOL, SymbolType::START));
     stack->push_front(table->getStartSymbol());
 }
 
