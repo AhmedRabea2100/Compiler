@@ -250,23 +250,30 @@ map<Symbol, ParsingTableBuilder::dependencies> ParsingTableBuilder::getDependenc
 
     return dependenciesMap;
 }
+
+
 void ParsingTableBuilder::constructParsingTable(std::map<Symbol, std::vector<Production>> rules, std::map<Symbol, std::set<Symbol>> first, std::map<Symbol, std::set<Symbol>> follow) {
     for (auto it = rules.begin(); it != rules.end(); it++) {
         std::vector<Production> productions = rules[it->first];
         for (auto prod : productions) {
             std::vector<Symbol> symbols = prod.productionSymbols;
+            // Check if the first symbol in the production can derive epsilon
             if (hasEpsilon(first[symbols[0]])) {
+                // If epsilon is in the first set, add entries for each symbol in follow set
                 for (auto terminal : follow[it->first]) {
+                    // Check if the table entry is already occupied
                     if (!parsingTable.isEmpty(it->first, terminal)) {
-                        std::cout << "ErrorHandler::errors[ErrorHandler::notLL1Error]";
+                        std::cout << "Grammar is not LL1";
                         exit(0);
                     }
                     parsingTable.addProduction(it->first, terminal, prod);
                 }
             } else {
+                // If epsilon is not in the first set, add entries for each symbol in first set
                 for (auto terminal : first[symbols[0]]) {
+                    // Check if the table entry is already occupied
                     if (!parsingTable.isEmpty(it->first, terminal)) {
-                        std::cout << "ErrorHandler::errors[ErrorHandler::notLL1Error]";
+                        std::cout << "Grammar is not LL1";
                         exit(0);
                     }
                     parsingTable.addProduction(it->first, terminal, prod);
@@ -274,6 +281,7 @@ void ParsingTableBuilder::constructParsingTable(std::map<Symbol, std::vector<Pro
             }
         }
     }
+    // Add synchronization entries for each non-terminal symbol in follow set
     addSyncEntries(follow);
 }
 
@@ -282,11 +290,15 @@ void ParsingTableBuilder::addSyncEntries(std::map<Symbol, std::set<Symbol>> foll
     sync.productionSymbols.push_back(Symbol("SYNC", TERMINAL));
     for (auto f : follow) {
         for (auto s : f.second) {
+            // Check if the table entry for the current non-terminal and terminal combination is empty
             if (parsingTable.isEmpty(f.first, s))
+                // If it's empty, add the synchronization production to the parsing table
                 parsingTable.addProduction(f.first, s, sync);
             else if (parsingTable.getProduction(f.first,s).productionSymbols[0].type == EPSILON)
+                // Continue to the next terminal symbol without making any changes
                 continue;
             else
+                // If the table entry is not empty and doesn't start with EPSILON
                 parsingTable.addProduction(f.first, s, sync);
 
         }

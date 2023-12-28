@@ -21,7 +21,7 @@ public:
     void writeError(std::string error);
     void writeTransitionTable(set<Dstate *> minimized_dfa, unordered_set<char> inputs);
 
-    void writeParsingTable(ParsingTable *parsingTable);
+    void writeParsingTable(ParsingTable* parsingTable);
 
     void writeParserResult(ParseResult& parserResult);
 
