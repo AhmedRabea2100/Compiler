@@ -29,19 +29,6 @@ std::map<Symbol, std::vector<Production>> CFGParser::getRules(std::string gramma
     eliminateLeftRecursion();
     eliminateLeftFactoring();
 
-    std::cout << "=========================================" << std::endl;
-    for(auto &x: rules){
-        std::cout << x.first.name << " -> ";
-        for(auto &y: x.second){
-            for(auto &z: y.productionSymbols){
-                std::cout << z.name << " " << z.type << " ";
-            }
-            std::cout << " | ";
-        }
-        std::cout << std::endl;
-    }
-    std::cout << std::endl;
-
     grammarFile.close();
     return rules;
 }
