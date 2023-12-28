@@ -10,6 +10,8 @@
 #include "./LexicalCodeParser/Tokenizer.h"
 #include "./ContextFreeGrammarParser/CFGParser.h"
 #include "./LL1Parser/ParsingTableBuilder.h"
+#include "./Parser/parser.h"
+
 
 std::ofstream file;
 std::string fileName = "yousry222.txt";
@@ -104,12 +106,7 @@ int main(){
 
     // Parse code
     auto *lexicalAnalyzerWritter = new OutputWritter("lexical_analyzer_output.txt");
-    Tokenizer tokenizer(minimized_dfa, "test_code.txt", lexicalAnalyzerWritter);
-    while(tokenizer.hasTokens()){
-        TokenWithLexeme token = tokenizer.getNextToken();
-//        cout << token.type << " " << token.lexeme << endl;
-    }
-    lexicalAnalyzerWritter->closeFile();
+    auto *tokenizer = new Tokenizer(minimized_dfa, "test_code.txt", lexicalAnalyzerWritter);
 
     // Parse Context Free Grammar
     CFGParser cfgParser;
@@ -118,8 +115,17 @@ int main(){
     // Build Parsing Table
     ParsingTableBuilder parsingTableBuilder;
     ParsingTable parsingTable = parsingTableBuilder.buildParsingTable(grammar);
-
     cout << "Finished building parsing table" << endl;
     writeParsingTable(parsingTable);
 
+    // Parse code and Left Derivation
+    auto *parserWritter = new OutputWritter("parser_output.txt");
+    auto *leftDerivationWritter = new OutputWritter("left_derivation.txt");
+    auto p = &parsingTable;
+    Parser::getInstance().parse(p, tokenizer, parserWritter, leftDerivationWritter);
+    std::cout << "Finished Matching & Parsing\n";
+
+    lexicalAnalyzerWritter->closeFile();
+    parserWritter->closeFile();
+    leftDerivationWritter->closeFile();
 }

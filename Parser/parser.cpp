@@ -43,7 +43,6 @@ void Parser::parse(ParsingTable *parsingTable,
 ParseResult Parser::parse(TokenWithLexeme token) {
     // To remove all the epsilons then start matching another symbol so the output message will not be empty
     while (stack->front().type == EPSILON) { stack->pop_front(); }
-
     Symbol top = stack->front();
     ParseResult result;
     if (top.type == START && token == END_LEXEME) {

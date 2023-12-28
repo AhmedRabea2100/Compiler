@@ -15,7 +15,10 @@ ParsingTable ParsingTableBuilder::buildParsingTable(map<Symbol, vector<Productio
 
     // construct parsing table
     constructParsingTable(grammar, firstSet, followSet);
-
+    for(auto &x: grammar){
+        if(x.first.type == START)
+            parsingTable.setStartSymbol(x.first);
+    }
     return parsingTable;
 }
 

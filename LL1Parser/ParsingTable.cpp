@@ -21,7 +21,7 @@ bool ParsingTable::isEmpty(Symbol nonTerminal, Symbol terminal) {
 
 bool ParsingTable::isSync(Symbol nonTerminal, Symbol terminal) {
     Production prod = parsingTable[nonTerminal][terminal];
-    return prod.productionSymbols[0].name == "sync";
+    return prod.productionSymbols[0].name == "SYNC";
 }
 void ParsingTable::addProduction(Symbol nonTerminal, Symbol terminal, Production production) {
     parsingTable[nonTerminal].insert(std::make_pair(terminal, production));
