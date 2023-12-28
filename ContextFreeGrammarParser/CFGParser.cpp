@@ -29,19 +29,6 @@ std::map<Symbol, std::vector<Production>> CFGParser::getRules(std::string gramma
     eliminateLeftRecursion();
     eliminateLeftFactoring();
 
-    std::cout << "=========================================" << std::endl;
-    for(auto &x: rules){
-        std::cout << x.first.name << " -> ";
-        for(auto &y: x.second){
-            for(auto &z: y.productionSymbols){
-                std::cout << z.name << " " << z.type << " ";
-            }
-            std::cout << " | ";
-        }
-        std::cout << std::endl;
-    }
-    std::cout << std::endl;
-
     grammarFile.close();
     return rules;
 }
@@ -156,7 +143,7 @@ std::map <Symbol, std::vector<Production>>::iterator CFGParser::findLongestLeftF
         // Add Epsilon to A' productions
         if(minLength == idx + 1){
             Production epsilonProduction;
-            epsilonProduction.productionSymbols.push_back(Symbol("\\L", EPSILON));
+            epsilonProduction.productionSymbols.push_back(Symbol(EPSILON_SYMBOL, EPSILON));
             newProductions.push_back(epsilonProduction);
         }
     }
@@ -224,7 +211,7 @@ void CFGParser::eliminateLeftRecursion() {
 
             // Epsilion production for rule'
             Production epsilonProduction;
-            epsilonProduction.productionSymbols.push_back(Symbol("\\L", EPSILON));
+            epsilonProduction.productionSymbols.push_back(Symbol(EPSILON_SYMBOL, EPSILON));
             alpha.push_back(epsilonProduction);
 
             // Add the new productions to original rule
@@ -273,10 +260,13 @@ void  CFGParser::resolveRule(std::string rule){
     std::vector<std::string> ruleParts = split(rule, PRODUCTION_DETECTOR);
     std::string lhs = trim(ruleParts[0], " \t");
     std::string rhs = trim(ruleParts[1], " \t");
-    if(rules.empty())
-        startSymbol.name = lhs;
     std::vector<Production> productions = rhsToProductions(rhs);
-    rules[Symbol(lhs, NON_TERMINAL)] = productions;
+    if(rules.empty()) {
+        startSymbol.name = lhs;
+        rules[startSymbol] = productions;
+    }
+    else
+        rules[Symbol(lhs, NON_TERMINAL)] = productions;
 }
 
 std::vector<Production> CFGParser::rhsToProductions(std::string rhs) {
