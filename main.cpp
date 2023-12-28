@@ -13,7 +13,6 @@
 #include "./Parser/parser.h"
 
 
-
 int main(){
     // Read and parse grammar file
     GrammarParser grammarParser;
@@ -55,15 +54,11 @@ int main(){
     ParsingTableBuilder parsingTableBuilder;
     ParsingTable parsingTable = parsingTableBuilder.buildParsingTable(grammar);
     cout << "Finished building parsing table" << endl;
-    auto *table = new OutputWritter("parsing_table.txt");
-    table->writeParsingTable(&parsingTable);
-    table->closeFile();
 
     // Parse code and Left Derivation
     auto *parserWritter = new OutputWritter("parser_output.txt");
     auto *leftDerivationWritter = new OutputWritter("left_derivation.txt");
-    auto p = &parsingTable;
-    Parser::getInstance().parse(p, tokenizer, parserWritter, leftDerivationWritter);
+    Parser::getInstance().parse(&parsingTable, tokenizer, parserWritter, leftDerivationWritter);
     std::cout << "Finished Matching & Parsing\n";
 
     lexicalAnalyzerWritter->closeFile();

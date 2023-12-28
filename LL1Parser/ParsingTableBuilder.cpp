@@ -15,10 +15,7 @@ ParsingTable ParsingTableBuilder::buildParsingTable(map<Symbol, vector<Productio
 
     // construct parsing table
     constructParsingTable(grammar, firstSet, followSet);
-    for(auto &x: grammar){
-        if(x.first.type == START)
-            parsingTable.setStartSymbol(x.first);
-    }
+
     return parsingTable;
 }
 
@@ -254,6 +251,12 @@ map<Symbol, ParsingTableBuilder::dependencies> ParsingTableBuilder::getDependenc
 
 void ParsingTableBuilder::constructParsingTable(std::map<Symbol, std::vector<Production>> rules, std::map<Symbol, std::set<Symbol>> first, std::map<Symbol, std::set<Symbol>> follow) {
     for (auto it = rules.begin(); it != rules.end(); it++) {
+        // if the current non-terminal symbol is the start symbol
+        if (it->first.type == START) {
+            // set the start symbol of the parsing table
+            parsingTable.setStartSymbol(it->first);
+        }
+
         std::vector<Production> productions = rules[it->first];
         for (auto prod : productions) {
             std::vector<Symbol> symbols = prod.productionSymbols;
@@ -300,7 +303,6 @@ void ParsingTableBuilder::addSyncEntries(std::map<Symbol, std::set<Symbol>> foll
             else
                 // If the table entry is not empty and doesn't start with EPSILON
                 parsingTable.addProduction(f.first, s, sync);
-
         }
     }
 }

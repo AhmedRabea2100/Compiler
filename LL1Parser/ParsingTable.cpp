@@ -30,6 +30,3 @@ void ParsingTable::addProduction(Symbol nonTerminal, Symbol terminal, Production
 std::map<Symbol, std::map<Symbol, Production>> ParsingTable::getParsingTable() {
     return parsingTable;
 }
-
-
-

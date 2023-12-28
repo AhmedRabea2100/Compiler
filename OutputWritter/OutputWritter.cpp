@@ -6,17 +6,6 @@ OutputWritter::OutputWritter(std::string fileName){
     file.open(fileName);
 }
 
-void OutputWritter::writeMatch(std::string currentMatch, std::string currentMatchType) {
-        file << "Token: "  << currentMatch;
-        for(int i = 0; i < 25 - currentMatch.size(); i++)
-            file << " ";
-        file << "Type: " << currentMatchType << std::endl;
-}
-
-void OutputWritter::writeError(std::string error) {
-    file << error << std::endl;
-}
-
 void OutputWritter::writeTransitionTable(set<Dstate *> minimized_dfa, unordered_set<char> inputs){
     // Sort inputs
     vector<char> sorted_inputs;
@@ -70,22 +59,6 @@ void OutputWritter::writeTransitionTable(set<Dstate *> minimized_dfa, unordered_
     drawLine(sorted_inputs.size() * 4 + 15);
 }
 
-void OutputWritter::closeFile() {
-    file.close();
-}
-
-void OutputWritter::fillSpaces(int length){
-    for (int i = 0; i < length; i++)
-        file << " ";
-}
-
-void OutputWritter::drawLine(int length)
-{
-    for (int i = 0; i < length; i++)
-        file << "-";
-    file << "\n";
-}
-
 void OutputWritter::writeParserResult(ParseResult& parserResult) {
     if (parserResult.msg.empty()) {
         file << parserResult.rule.first.toString() << " ----> " << parserResult.rule.second.stringify() << std::endl;
@@ -135,8 +108,8 @@ void OutputWritter::writeParsingTable(ParsingTable* parsingTable) {
 }
 
 void OutputWritter::writeLeftDerivation(std::list<Symbol> *derivationLeftSide,
-                                     std::list<Symbol> *stack,
-                                     std::string errorMsg) {
+                                        std::list<Symbol> *stack,
+                                        std::string errorMsg) {
     for (auto symbol: *derivationLeftSide) {
         file << symbol.toString() << " ";
     }
@@ -153,4 +126,31 @@ void OutputWritter::writeLeftDerivation(std::list<Symbol> *derivationLeftSide,
     }
 
     file << std::endl;
+}
+
+void OutputWritter::writeMatch(std::string currentMatch, std::string currentMatchType) {
+    file << "Token: "  << currentMatch;
+    for(int i = 0; i < 25 - currentMatch.size(); i++)
+        file << " ";
+    file << "Type: " << currentMatchType << std::endl;
+}
+
+void OutputWritter::writeError(std::string error) {
+    file << error << std::endl;
+}
+
+void OutputWritter::closeFile() {
+    file.close();
+}
+
+void OutputWritter::fillSpaces(int length){
+    for (int i = 0; i < length; i++)
+        file << " ";
+}
+
+void OutputWritter::drawLine(int length)
+{
+    for (int i = 0; i < length; i++)
+        file << "-";
+    file << "\n";
 }

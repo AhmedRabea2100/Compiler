@@ -14,10 +14,10 @@ public:
     void addProduction(Symbol nonTerminal, Symbol terminal, Production production);
     std::map<Symbol, std::map<Symbol, Production>> getParsingTable();
     void setStartSymbol(Symbol start);
+
 private:
     std::map<Symbol, std::map<Symbol, Production>> parsingTable;
     Symbol start;
-
 };
 
 #endif //COMPILER_PARSINGTABLE_H
