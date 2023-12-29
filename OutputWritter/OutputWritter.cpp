@@ -59,6 +59,25 @@ void OutputWritter::writeTransitionTable(set<Dstate *> minimized_dfa, unordered_
     drawLine(sorted_inputs.size() * 4 + 15);
 }
 
+void OutputWritter::writeGrammar(map<Symbol, vector<Production>> grammar){
+    for (auto &rule : grammar)
+    {
+        file << rule.first.name << " --> ";
+        for (auto &production : rule.second)
+        {
+            for (auto &symbol : production.productionSymbols)
+            {
+                file << symbol.name << " ";
+            }
+            if (&production != &rule.second.back())
+            {
+                file << " | ";
+            }
+        }
+        file << "\n";
+    }
+}
+
 void OutputWritter::writeParserResult(ParseResult& parserResult) {
     if (parserResult.msg.empty()) {
         file << parserResult.rule.first.toString() << " ----> " << parserResult.rule.second.stringify() << std::endl;

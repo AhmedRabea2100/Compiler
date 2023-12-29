@@ -31,18 +31,6 @@ std::map<Symbol, std::vector<Production>> CFGParser::getRules(std::string gramma
 
     grammarFile.close();
 
-
-    for(auto it = rules.begin(); it != rules.end(); it++){
-        std::cout << it->first.name << " --> ";
-        for(auto &x: it->second){
-            for(auto &y: x.productionSymbols){
-                std::cout << y.name << " ";
-            }
-            if(&x != &it->second.back())
-                std::cout << "| ";
-        }
-        std::cout << std::endl;
-    }
     return rules;
 }
 

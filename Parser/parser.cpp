@@ -33,9 +33,6 @@ void Parser::parse(ParsingTable *parsingTable,
         result = Parser::getInstance().parse(END_LEXEME);
         parserWriter->writeParserResult(result);
         leftDerivationWriter->writeLeftDerivation(derivativeLeftSide, stack, result.msg);
-        if (!stack->empty()) {
-            stack->pop_front();
-        }
     }
 }
 

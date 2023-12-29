@@ -50,6 +50,12 @@ int main(){
     CFGParser cfgParser;
     map<Symbol, vector<Production>> grammar = cfgParser.getRules("context_free_grammar.txt");
 
+    // Write Context Free Grammar
+    auto *grammarWritter = new OutputWritter("grammar_output.txt");
+    grammarWritter->writeGrammar(grammar);
+    grammarWritter->closeFile();
+    cout << "Finished writing grammar" << endl;
+
     // Build Parsing Table
     ParsingTableBuilder parsingTableBuilder;
     ParsingTable parsingTable = parsingTableBuilder.buildParsingTable(grammar);

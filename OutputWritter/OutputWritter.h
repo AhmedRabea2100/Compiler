@@ -15,6 +15,7 @@ class OutputWritter
 public:
     OutputWritter(std::string fileName);
     void writeTransitionTable(set<Dstate *> minimized_dfa, unordered_set<char> inputs);
+    void writeGrammar(map<Symbol, vector<Production>> grammar);
     void writeParsingTable(ParsingTable* parsingTable);
     void writeParserResult(ParseResult& parserResult);
     void writeLeftDerivation(std::list<Symbol> *derivationLeftSide, std::list<Symbol> *stack, std::string errorMsg);
